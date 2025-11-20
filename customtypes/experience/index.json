@@ -1,0 +1,88 @@
+{
+  "format": "custom",
+  "id": "experience",
+  "label": "experience",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "UID"
+        }
+      },
+      "company": {
+        "type": "Text",
+        "config": {
+          "label": "Company",
+          "placeholder": ""
+        }
+      },
+      "jobTitle": {
+        "type": "Text",
+        "config": {
+          "label": "Job title",
+          "placeholder": ""
+        }
+      },
+      "startDate": {
+        "type": "Date",
+        "config": {
+          "label": "Start date",
+          "placeholder": ""
+        }
+      },
+      "endDate": {
+        "type": "Date",
+        "config": {
+          "label": "End date",
+          "placeholder": ""
+        }
+      },
+      "description": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Description",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+        }
+      },
+      "logo": {
+        "type": "Image",
+        "config": {
+          "label": "Logo",
+          "constraint": {
+            "width": 50,
+            "height": 50
+          },
+          "thumbnails": []
+        }
+      },
+      "tools": {
+        "type": "Group",
+        "config": {
+          "label": "Tools",
+          "repeat": true,
+          "fields": {
+            "tool": {
+              "type": "Link",
+              "config": {
+                "label": "Tool",
+                "select": "document",
+                "repeat": false,
+                "customtypes": [
+                  {
+                    "id": "skill",
+                    "fields": ["name"]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

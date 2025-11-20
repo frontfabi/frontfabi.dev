@@ -1,0 +1,45 @@
+{
+  "format": "custom",
+  "id": "education",
+  "label": "education",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "Main": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "UID"
+        }
+      },
+      "school": {
+        "type": "Text",
+        "config": {
+          "label": "school",
+          "placeholder": ""
+        }
+      },
+      "major": {
+        "type": "Text",
+        "config": {
+          "label": "major",
+          "placeholder": ""
+        }
+      },
+      "startDate": {
+        "type": "Date",
+        "config": {
+          "label": "Start date",
+          "placeholder": ""
+        }
+      },
+      "endDate": {
+        "type": "Date",
+        "config": {
+          "label": "End date",
+          "placeholder": ""
+        }
+      }
+    }
+  }
+}
