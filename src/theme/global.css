@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "Visby";
+  src: url("../assets/VisbyCF-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Visby";
+  src: url("../assets/VisbyCF-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Visby";
+  src: url("../assets/VisbyCF-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Placard";
+  src: url("../assets/PlacardNextCnBold.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+p, span, a, li, div {
+  font-family: "Visby", sans-serif;
+  font-weight: normal;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Placard", sans-serif;
+  line-height: 1;
+  font-weight: normal;
+  margin: 0;
+}
+
+h2 {
+  /* clamp(Mínimo, Escala Fluida (vw + rem), Máximo) */
+  font-size: clamp(2.5rem, 8vw + 2rem, 3.7rem);
+}
+
+/* H2: Grande, mas hierarquicamente abaixo do H1 */
+h3 {
+  /* Mínimo de 2rem, Máximo de 7rem */
+  font-size: clamp(2rem, 6vw + 1.5rem, 3rem);
+}
+
+/* H3: Título de Seção */
+h4 {
+  /* Mínimo de 1.75rem, Máximo de 5rem */
+  font-size: clamp(1.75rem, 4vw + 1.25rem, 2.5rem);
+}
+
+/* H4: Subtítulo ou Elemento de Ênfase */
+h5 {
+  /* Mínimo de 1.5rem, Máximo de 3rem */
+  font-size: clamp(1.5rem, 3vw + 1rem, 1.7rem);
+}
+
+.title {
+  text-transform: uppercase;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.light {
+  background-color: #f8f0df;
+  color: #030004;
+  border-color: #030004;
+}
+
+.light::selection {
+  background: #030004;
+  color: #C5F409;
+}
+
+.dark {
+  color: #f8f0df;
+  background-color: #030004;
+  border-color: #f8f0df;
+}
+
+.light::selection {
+  background: #030004;
+  color: #C5F409;
+}
+
+.dark::selection {
+  background: #f8f0df;
+  color: #F5760A;
+}

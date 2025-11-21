@@ -351,7 +351,7 @@ export type ExperienceDocument<Lang extends string = string> =
     Lang
   >;
 
-type PageDocumentDataSlicesSlice = RichTextSlice;
+type PageDocumentDataSlicesSlice = NavigationSlice | ExperiencesSlice;
 
 /**
  * Content for Page documents
@@ -470,6 +470,169 @@ export type AllDocumentTypes =
   | SkillDocument;
 
 /**
+ * Item in *Experiences → Default → Primary → XP_List*
+ */
+export interface ExperiencesSliceDefaultPrimaryXpListItem {
+  /**
+   * Experience field in *Experiences → Default → Primary → XP_List*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: experiences.default.primary.xp_list[].experience
+   * - **Documentation**: https://prismic.io/docs/fields/content-relationship
+   */
+  experience: ContentRelationshipFieldWithData<
+    [
+      {
+        id: "experience";
+        fields: [
+          "company",
+          "jobTitle",
+          "startDate",
+          "endDate",
+          "logo",
+          {
+            id: "tools";
+            fields: [
+              { id: "tool"; customtypes: [{ id: "skill"; fields: ["name"] }] },
+            ];
+          },
+        ];
+      },
+    ]
+  >;
+}
+
+/**
+ * Primary content in *Experiences → Default → Primary*
+ */
+export interface ExperiencesSliceDefaultPrimary {
+  /**
+   * Name field in *Experiences → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: experiences.default.primary.name
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * XP_List field in *Experiences → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: experiences.default.primary.xp_list[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  xp_list: prismic.GroupField<
+    Simplify<ExperiencesSliceDefaultPrimaryXpListItem>
+  >;
+}
+
+/**
+ * Default variation for Experiences Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ExperiencesSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ExperiencesSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Experiences*
+ */
+type ExperiencesSliceVariation = ExperiencesSliceDefault;
+
+/**
+ * Experiences Shared Slice
+ *
+ * - **API ID**: `experiences`
+ * - **Description**: Experiences
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type ExperiencesSlice = prismic.SharedSlice<
+  "experiences",
+  ExperiencesSliceVariation
+>;
+
+/**
+ * Item in *Navigation → Default → Primary → NavList*
+ */
+export interface NavigationSliceDefaultPrimaryNavListItem {
+  /**
+   * Link field in *Navigation → Default → Primary → NavList*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: navigation.default.primary.navList[].link
+   * - **Documentation**: https://prismic.io/docs/fields/content-relationship
+   */
+  link: ContentRelationshipFieldWithData<[{ id: "page"; fields: ["title"] }]>;
+
+  /**
+   * Label field in *Navigation → Default → Primary → NavList*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: navigation.default.primary.navList[].label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  label: prismic.KeyTextField;
+}
+
+/**
+ * Primary content in *Navigation → Default → Primary*
+ */
+export interface NavigationSliceDefaultPrimary {
+  /**
+   * NavList field in *Navigation → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: navigation.default.primary.navList[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  navList: prismic.GroupField<
+    Simplify<NavigationSliceDefaultPrimaryNavListItem>
+  >;
+}
+
+/**
+ * Default variation for Navigation Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type NavigationSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<NavigationSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Navigation*
+ */
+type NavigationSliceVariation = NavigationSliceDefault;
+
+/**
+ * Navigation Shared Slice
+ *
+ * - **API ID**: `navigation`
+ * - **Description**: Navigation
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type NavigationSlice = prismic.SharedSlice<
+  "navigation",
+  NavigationSliceVariation
+>;
+
+/**
  * Primary content in *RichText → Default → Primary*
  */
 export interface RichTextSliceDefaultPrimary {
@@ -549,6 +712,16 @@ declare module "@prismicio/client" {
       SkillDocument,
       SkillDocumentData,
       AllDocumentTypes,
+      ExperiencesSlice,
+      ExperiencesSliceDefaultPrimaryXpListItem,
+      ExperiencesSliceDefaultPrimary,
+      ExperiencesSliceVariation,
+      ExperiencesSliceDefault,
+      NavigationSlice,
+      NavigationSliceDefaultPrimaryNavListItem,
+      NavigationSliceDefaultPrimary,
+      NavigationSliceVariation,
+      NavigationSliceDefault,
       RichTextSlice,
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,

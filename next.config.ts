@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  compiler: {
+    // Habilita a transformação para styled-components
+    styledComponents: true,
+  },
 };
 
 export default nextConfig;

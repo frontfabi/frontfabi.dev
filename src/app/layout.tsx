@@ -1,15 +1,13 @@
-import { PrismicPreview } from "@prismicio/next";
-import { repositoryName } from "@/prismicio";
+import StyledComponentsRegistry from "./lib/registry";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+import "../theme/global.css";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-      <PrismicPreview repositoryName={repositoryName} />
+    <html>
+      <body className="light">
+        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+      </body>
     </html>
   );
 }
