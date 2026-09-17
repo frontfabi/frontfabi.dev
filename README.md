@@ -1,4 +1,4 @@
-# frontfabi.dev
+# frontfabi.dev (portfolio novo / CV)
 
 Site pessoal em Next.js App Router, com Prismic como headless CMS e hospedagem na Vercel. A interface segue as referências fornecidas: desktop retrô, Silkscreen/VT323, paleta creme/teal/âmbar, ícones Pixel e janelas móveis.
 
