@@ -1,38 +1,28 @@
-import { ProfessionalRow } from "@/components/ProfessionalRow";
-import { Content } from "@prismicio/client";
-import { SliceComponentProps } from "@prismicio/react";
-import { FC } from "react";
-import * as S from "./styles";
-
-/**
- * Props for `Experiences`.
- */
-export type ExperiencesProps = SliceComponentProps<Content.ExperiencesSlice>;
-
-/**
- * Component for "Experiences" Slices.
- */
-const Experiences: FC<ExperiencesProps> = ({ slice }) => {
-  const content = slice.primary;
-  const experiences = content.xp_list
-    .filter((xp) => xp.experience)
-    .map((xp) => ({ ...xp.experience?.data, slug: xp.experience?.slug }));
-  console.log("experiences", content, experiences);
+import Link from "next/link";
+import { isFilled, type Content } from "@prismicio/client";
+import type { SliceComponentProps } from "@prismicio/react";
+export default function Experiences({
+  slice,
+}: SliceComponentProps<Content.ExperiencesSlice>) {
   return (
-    <S.StyledExperience
-      data-slice-type={slice.slice_type}
-      data-slice-variation={slice.variation}
-    >
-      <S.BlockHeader>
-        <h2>{content.name}</h2>
-      </S.BlockHeader>
-      <S.BlockList>
-        {experiences.map((xp) => (
-          <ProfessionalRow {...xp} key={xp.slug} />
-        ))}
-      </S.BlockList>
-    </S.StyledExperience>
+    <section data-slice-type={slice.slice_type}>
+      <h2>{slice.primary.name}</h2>
+      <ul className="file-list">
+        {slice.primary.xp_list.map(({ experience }) =>
+          isFilled.contentRelationship(experience) ? (
+            <li key={experience.id}>
+              <Link
+                href={
+                  experience.url || `/trabalho/profissional/${experience.uid}`
+                }
+              >
+                <strong>{experience.data?.company || experience.uid}</strong>
+                <span>{experience.data?.jobTitle}</span>
+              </Link>
+            </li>
+          ) : null,
+        )}
+      </ul>
+    </section>
   );
-};
-
-export default Experiences;
+}

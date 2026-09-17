@@ -29,17 +29,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-<<<<<<< HEAD
-
-# local env files
-.env*.local
-.env
-=======
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# Local environment files
 .env*
->>>>>>> 3992090 (:tada: initial)
+!.env.example
 
 # vercel
 .vercel

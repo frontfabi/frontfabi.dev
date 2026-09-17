@@ -1,14 +1,8 @@
-import { formatDistance, format } from "date-fns";
-import * as S from "./styles";
-type ProfessionalRowProps = {
-  company: string;
-  jobTitle: string;
-  description: string;
-  startDate: string;
-  endDate?: string;
-  tools: { tool: { data: { name: string } } }[];
-  logo: any;
-};
+import { isFilled, type Content } from "@prismicio/client";
+import { PrismicRichText } from "@prismicio/react";
+import { PrismicNextImage } from "@prismicio/next";
+import { period } from "@/lib/content";
+import type { Locale } from "@/lib/site";
 export const ProfessionalRow = ({
   company,
   jobTitle,
@@ -17,33 +11,28 @@ export const ProfessionalRow = ({
   endDate,
   tools,
   logo,
-}: ProfessionalRowProps) => {
-  const formDate = (date: string, formatStr: string) => format(new Date(date), formatStr);
-  return (
-    <S.StyledRow className="professional-row">
-      <S.Content>
-        <S.Avatar field={logo} width={80} height={80} />
-        <div>
-          <h3 className="title">{company}</h3>
-          <h4>{jobTitle}</h4>
-          <p>{description}</p>
-          <p>
-            Tecnologias: {tools.map((item) => item.tool.data.name).join(", ")}
-          </p>
-        </div>
-      </S.Content>
-      <S.Dates>
-        <strong>
-          {formDate(startDate, "LLL/yy")} até{" "}
-          {endDate ? formDate(endDate, "LLL/yy") : "agora"}
-        </strong>
-        <p>
-          {formatDistance(
-            new Date(startDate),
-            new Date(endDate ? endDate : new Date())
+  locale = "pt",
+}: Content.ExperienceDocument["data"] & { locale?: Locale }) => (
+  <div className="professional-row">
+    <div className="experience-heading">
+      <PrismicNextImage field={logo} width={50} height={50} />
+      <div>
+        <h2>{jobTitle || company}</h2>
+        <p className="meta">{period(startDate, endDate, locale)}</p>
+      </div>
+    </div>
+    <PrismicRichText field={description} />
+    {!!tools.length && (
+      <>
+        <h3>Stack</h3>
+        <ul className="tags">
+          {tools.map(({ tool }, i) =>
+            isFilled.contentRelationship(tool) && tool.data?.name ? (
+              <li key={tool.id || i}>{tool.data.name}</li>
+            ) : null,
           )}
-        </p>
-      </S.Dates>
-    </S.StyledRow>
-  );
-};
+        </ul>
+      </>
+    )}
+  </div>
+);

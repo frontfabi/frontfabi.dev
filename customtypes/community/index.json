@@ -28,7 +28,7 @@
             "Palestra",
             "Workshop",
             "Curso",
-            "Organização/Liderança",
+            "Organiza\u00e7\u00e3o/Lideran\u00e7a",
             "Mentoria"
           ]
         }
@@ -75,6 +75,14 @@
               }
             }
           }
+        }
+      },
+      "description": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Description",
+          "multi": "paragraph,heading2,heading3,strong,em,hyperlink,list-item,o-list-item,image,preformatted",
+          "allowTargetBlank": true
         }
       }
     }

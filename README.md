@@ -1,117 +1,62 @@
-# Prismic + Next.js Minimal Starter
+# frontfabi.dev
 
-Want to quickly get started building your own project with [Prismic][prismic] and [Next.js][nextjs]? This project includes basic configurations and nothing else. The project includes one Rich Text slice, a homepage, and a dynamic page.
+Site pessoal em Next.js App Router, com Prismic como headless CMS e hospedagem na Vercel. A interface segue as referências fornecidas: desktop retrô, Silkscreen/VT323, paleta creme/teal/âmbar, ícones Pixel e janelas móveis.
 
-- **Demo**: [Open live demo][live-demo]
-- **Learn more about Prismic and Next.js**: [Prismic Next.js Documentation][prismic-docs]
+## Desenvolvimento
 
-&nbsp;
-
-![Website screenshot](https://user-images.githubusercontent.com/31219208/228821412-fdde92b2-c13c-4287-b799-611fa96a5fd6.png)
-
-&nbsp;
-
-## 🚀 Quick Start
-
-To start a new project using this starter:
-
-1. Visit <https://prismic.io/dashboard>.
-2. Create a new Prismic repository by selecting **Next.js**.
-3. Select the **Minimal starter**.
-4. Fill out your repository details and continue with the steps given in Prismic.
-
-When you're ready to start your project, run the following command:
+Requer Node.js 22 LTS ou superior.
 
 ```sh
+npm ci
 npm run dev
 ```
 
-## How to use your project
+O Next.js abre na porta 3000 e o Slice Machine na 9999. Para iniciar somente o site: `npm run next:dev`. Variáveis opcionais estão em `.env.example`; mantenha as variáveis existentes da Vercel. Não há novo serviço de hospedagem.
 
-To edit the content of this project, go to [prismic.io/dashboard](https://prismic.io/dashboard), click on the repository for this website, and start editing.
-
-### Create a page
-
-To create a page, click on the green pencil icon, then select **Page**.
-
-Pages are made of Slices. You can add and rearrange Slices to your pages.
-
-Your new page will be accessible by its URL, but it won't appear on the website automatically. To let users discover it, add it to the navigation.
-
-### Preview documents
-
-If you chose this starter when you created a new repository from the Prismic Dashboard, then your repository is preconfigured with previews on localhost. To change the preview configuration or add previews to your production or staging environments, see [Preview Drafts in Next.js](https://prismic.io/docs/technologies/preview-content-nextjs) in the Prismic documentation.
-
-### Customize this website
-
-This website is preconfigured with Prismic. It has three Prismic packages installed:
-
-- `@prismicio/client` provides helpers for fetching content from Prismic
-- `@prismicio/react` provides React components for rendering content from Prismic
-- `@prismicio/next` provides a wrapper component to configure Prismic previews
-
-These packages are already integrated and employed in this app. Take a look at the code to see how they're used.
-
-### Edit the code
-
-There are two steps to rendering content from Prismic in your Next.js project:
-
-1. Fetch content from the Prismic API using `@prismicio/client`.
-2. Template the content using components from `@prismicio/react`.
-
-Here are some of the files in your project that you can edit:
-
-- `prismicio.ts` - This file includes configuration for `@prismicio/client` and exports useful API helpers.
-- `app/layout.tsx` - This is your layout component, which includes configuration for `@prismicio/react` and `@prismicio/next`.
-- `app/page.tsx` - This is the app homepage. It queries and renders a page document with the UID (unique identifier) "home" from the Prismic API.
-- `app/[uid]/page.tsx` - This is the page component, which queries and renders a page document from your Prismic repository based on the UID.
-- `slices/*/index.tsx` - Each Slice in your project has an index.tsx file that renders the Slice component. Edit this file to customize your Slices.
-
-These are important files that you should leave as-is:
-
-- `app/api/exit-preview/route.ts` - Do not edit or delete this file. This is the API endpoint to close a Prismic preview session.
-- `app/api/preview/route.ts` - Do not edit or delete this file. This is the API endpoint to launch a Prismic preview session.
-- `app/slice-simulator/page.tsx` - Do not edit or delete this file. This file simulates your Slice components in development.
-- `slices/` - This directory contains Slice components, which are generated programmatically by Slice Machine. To customize a Slice template, you can edit the Slice's index.tsx file. To add Slices, delete Slices, or edit Slice models, use Slice Machine (more info below).
-
-Learn more about how to edit your components with [Fetch Data in Next.js](https://prismic.io/docs/technologies/fetch-data-nextjs) and [Template Content in Next.js](https://prismic.io/docs/technologies/template-content-nextjs).
-
-Learn more about how to use [TypeScript with Prismic](https://prismic.io/docs/typescript-nextjs).
-
-### Deploy to the web
-
-To put your project online, see [Deploy your Next.js App](https://prismic.io/docs/technologies/deploy-nextjs).
-
-### Edit content models with Slice Machine
-
-This project includes an application called Slice Machine, which generates models for your Custom Types and Slices. Slice Machine stores the models locally in your codebase, so you can save and version them. It also syncs your models to Prismic. To learn how to use Slice Machine, read [Model Content in Next.js](https://prismic.io/docs/technologies/model-content-nextjs).
-
-If you change or add to your Custom Types, you'll need to update your route handling to match. To learn how to do that, read [Define Paths in Next.js](https://prismic.io/docs/technologies/define-paths-nextjs).
-
-## Documentation
-
-For the official Prismic documentation, see [Prismic's guide for Next.js][prismic-docs] or the [technical references for the installed Prismic packages](https://prismic.io/docs/technologies/technical-references).
-
-## License
-
-```
-Copyright 2013-2022 Prismic <contact@prismic.io> (https://prismic.io)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+```sh
+npm run lint
+npx tsc --noEmit
+node --experimental-strip-types --test tests/desktop.test.mjs
+npm run build
 ```
 
-[prismic]: https://prismic.io/
-[prismic-docs]: https://prismic.io/docs/technologies/nextjs
-[prismic-sign-up]: https://prismic.io/dashboard/signup
-[nextjs]: https://nextjs.org/
-[live-demo]: https://nextjs-starter-prismic-minimal.vercel.app/
+## Rotas e idiomas
+
+- `/`: configuração inicial com Sobre e Contato abertas. Clicar em **frontfabi** fecha as demais janelas e restaura essa disposição.
+- `/sobre`, `/blog`, `/trabalho`: aplicativos com navegação real, renderizada no servidor.
+- `/articles/:uid`: publicação do blog; mantém o formato público dos links antigos.
+- `/trabalho/profissional/:uid` e `/trabalho/comunidade/:uid`: cada experiência tem página própria.
+- `/xp` redireciona permanentemente para `/trabalho`.
+- `/en/...` e `/es/...`: mesmas rotas em inglês e espanhol; português usa a raiz.
+- Outras páginas Prismic continuam disponíveis por UID. `/home` redireciona para `/`.
+
+Os menus File, Edit, View, Window e Help abrem opções funcionais. As janelas têm foco visual por sobreposição, fechamento, movimento pela barra de título, redimensionamento pelo canto inferior direito e maximização. A janela principal também pode ser minimizada e restaurada no dock. Setas movem a janela com foco na barra; Shift + setas redimensiona. O movimento permanece dentro da área utilizável. No celular, os aplicativos usam a tela inteira; na home, Sobre e Contato aparecem empilhadas.
+
+## Prismic: sincronização necessária
+
+Os modelos locais são aditivos: nenhum documento existente ou campo antigo foi removido. **É necessário sincronizar as alterações pelo Slice Machine antes de preencher os novos campos.** Esta implementação não publica documentos nem altera idiomas no painel remoto.
+
+1. Abra `npm run slicemachine`, autentique no repositório `frontfabi` e sincronize os modelos.
+2. `page`: passa a aceitar a slice `rich_text` e o campo `home_intro`. Use os UIDs `home` e `sobre`; páginas `blog` e `trabalho` são opcionais para metadados. A introdução da home vem de `home_intro`; enquanto estiver vazia, há um texto introdutório curto no código. As slices antigas de experiências da home não são exibidas no desktop inicial.
+3. `post`: novo tipo para o blog, com título, resumo, data, categoria, corpo, capa e metadados. Preserve os UIDs dos posts antigos ao importar, para manter os links `/articles/:uid`.
+4. `experience`: reutiliza `company`, `jobTitle`, `startDate`, `endDate`, `description`, `logo` e `tools`. Cada documento aparece em **Experiência profissional**.
+5. `community`: reutiliza os campos existentes e acrescenta `description`. Cada documento aparece em **Comunidade & palestras**. O tipo de contribuição (palestra, workshop, curso, organização/liderança, mentoria) permanece separado da categoria principal.
+6. O repositório consultado possui `pt-br` e `en-us`. Os documentos publicados encontrados estão em `en-us`, alguns com texto em português. Revise essa classificação no Prismic e crie as traduções vinculadas; não há cópia automática de um idioma para outro.
+7. Adicione `es-es` no Prismic para habilitar espanhol. Conteúdo de outro idioma não é apresentado como se fosse uma tradução. Em detalhes de posts/experiências, o seletor só oferece traduções vinculadas em `alternate_languages`.
+8. Salve os modelos no Slice Machine para regenerar `prismicio-types.d.ts`. Enquanto isso, `src/lib/content-types.ts` tipa os campos aditivos como opcionais para compatibilidade com documentos antigos.
+
+O tipo `post` só entra no route resolver quando existe no repositório remoto; assim o site continua compilando antes da sincronização. Listas vazias e páginas ainda não publicadas mostram um estado explícito, sem conteúdo fictício. Contato e link do CV atuais ficam em `src/components/Desktop/index.tsx`.
+
+## SEO, previews e publicação
+
+Metadados, canonical, `hreflang` de traduções vinculadas, JSON-LD de artigos, `robots.txt` e sitemap são gerados a partir do conteúdo. Páginas vazias ficam como `noindex`; URLs desconhecidas retornam 404. Os dados do CMS são renderizados no servidor, mesmo dentro das janelas interativas.
+
+Configure no Prismic o preview em `/api/preview` e mantenha o webhook de publicação em `/api/revalidate`. O cliente usa a tag `prismic` para invalidar o conteúdo em cache. A rota existente de revalidação foi preservada.
+
+A Vercel continua usando `npm run build`. Se a integração atual aponta para `main`, um push nessa branch dispara o deploy. Primeiro valide em uma branch/Preview Deployment, revise idiomas e importe os posts antigos antes de trocar o site público. Não foi adicionado deploy por outra plataforma.
+
+A integração com dev.to não foi ativada: o Prismic permanece a fonte editorial. Uma futura distribuição deve preservar o canonical de cada artigo no frontfabi.dev.
+
+## Assets
+
+Fontes locais Silkscreen e VT323, distribuídas sob SIL Open Font License; licenças em `public/fonts`. Ícones Streamline Pixel, CC BY 4.0; licença e origem em `public/icons/LICENSE.md`, com crédito na janela de ajuda. As imagens de referência orientaram o layout; não foram incorporadas como screenshots do site.

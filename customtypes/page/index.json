@@ -32,8 +32,19 @@
             },
             "experiences": {
               "type": "SharedSlice"
+            },
+            "rich_text": {
+              "type": "SharedSlice"
             }
           }
+        }
+      },
+      "home_intro": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Home introduction",
+          "multi": "paragraph,strong,em,hyperlink",
+          "allowTargetBlank": true
         }
       }
     },
