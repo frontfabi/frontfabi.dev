@@ -134,11 +134,12 @@ function text(value: unknown, fallback: string) {
 }
 
 function httpsUrl(value: unknown, fallback: string) {
+  const link = record(value);
   const url =
     typeof value === "string"
       ? value
-      : typeof record(value).url === "string"
-        ? record(value).url
+      : typeof link.url === "string"
+        ? link.url
         : "";
   try {
     return new URL(url).protocol === "https:" ? url : fallback;
