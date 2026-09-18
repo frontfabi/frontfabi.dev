@@ -27,6 +27,10 @@ export type CommunityDocument = Omit<Content.CommunityDocument, "data"> & {
 export type PageDocument = Omit<Content.PageDocument, "data"> & {
   data: Content.PageDocument["data"] & { home_intro?: RichTextField };
 };
+export type SiteSettingsDocument = PrismicDocument<
+  Record<string, never>,
+  "site_settings"
+>;
 export type SiteDocument =
   | Exclude<
       Content.AllDocumentTypes,
@@ -34,4 +38,5 @@ export type SiteDocument =
     >
   | CommunityDocument
   | PageDocument
-  | PostDocument;
+  | PostDocument
+  | SiteSettingsDocument;

@@ -3,6 +3,7 @@ import { asText, NotFoundError } from "@prismicio/client";
 import { createClient, routesForTypes } from "@/prismicio";
 import { copy, locales, localizedPath, type Locale } from "./site";
 import type { SiteDocument } from "./content-types";
+import { settingsFromDocument, type SiteSettings } from "./site-settings";
 
 export const repository = cache(async () => createClient().getRepository());
 export const availableLocales = cache(async () => {
@@ -25,6 +26,18 @@ export const documents = cache(
     );
   },
 );
+export const siteSettings = cache(async (locale: Locale): Promise<SiteSettings> => {
+  const repo = await repository();
+  if (!repo.types.site_settings || !repo.languages.some((lang) => lang.id === locales[locale]))
+    return settingsFromDocument(null, locale);
+  try {
+    const settings = await createClient({ routes: routesForTypes(repo.types) }).getSingle("site_settings", { lang: locales[locale] });
+    return settingsFromDocument(settings, locale);
+  } catch (error) {
+    if (error instanceof NotFoundError) return settingsFromDocument(null, locale);
+    throw error;
+  }
+});
 export const document = cache(
   async (type: SiteDocument["type"], uid: string, locale: Locale) => {
     const repo = await repository();
