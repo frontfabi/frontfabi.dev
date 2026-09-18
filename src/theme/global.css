@@ -772,7 +772,7 @@ button:disabled,
 .mural-badge { position: absolute; top: -8px; right: -8px; width: 15px; height: 15px; border: 2px solid var(--ink); border-radius: 50%; background: var(--pink); }
 .mural { left: calc(50vw - 270px); top: 12vh; width: 540px; height: 500px; }
 .mural-login { left: calc(50vw - 180px); top: 25vh; width: 360px; height: 280px; }
-.mural-widget { display: grid; grid-template-columns: minmax(0, 1fr) 92px; grid-template-rows: minmax(0, 1fr) 142px; height: 100%; background: var(--eggshell); }
+.mural-widget { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 92px; grid-template-rows: minmax(0, 1fr) 142px; height: 100%; background: var(--eggshell); }
 .mural-history { grid-column: 1; min-height: 0; overflow: auto; padding: 18px; background: var(--white); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
 .mural-empty { margin: 0; color: var(--ink-soft); font-size: 13px; }
 .mural-message { display: flex; gap: 8px; margin: 0 0 12px; padding: 8px; border: 1px solid var(--line); background: var(--eggshell); font: 12px Verdana, sans-serif; }
@@ -1558,4 +1558,35 @@ p {
   .not-found-marquee-copy:first-child {
     display: block;
   }
+}
+
+/* Transient delivery feedback, styled like the retro system alerts. */
+.mural-feedback-region {
+  position: absolute;
+  inset: 12px 12px auto;
+  z-index: 2;
+  pointer-events: none;
+}
+.mural-feedback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border: 2px solid;
+  color: var(--ink);
+  font: 12px/1.5 "Born2bSporty FS", monospace;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.mural-feedback--success {
+  border-color: var(--success);
+  background: var(--success-bg);
+}
+.mural-feedback--error {
+  border-color: var(--error);
+  background: var(--error-bg);
+}
+.mural-feedback--warning {
+  border-color: var(--amber);
+  background: var(--warning-bg);
 }

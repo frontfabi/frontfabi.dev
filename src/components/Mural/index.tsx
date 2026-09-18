@@ -12,27 +12,91 @@ export default function Mural({ onLogin }: { onLogin: () => void }) {
   const [messages, setMessages] = useState<MuralMessage[]>([]);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
+  const [feedback, setFeedback] = useState<{
+    kind: "success" | "error" | "warning";
+    text: string;
+  } | null>(null);
+  useEffect(() => {
+    if (!feedback) return;
+    const timeout = window.setTimeout(() => setFeedback(null), 600);
+    return () => window.clearTimeout(timeout);
+  }, [feedback]);
   const { data: session } = useSession();
   const signedIn = Boolean(session?.user?.githubId);
   useEffect(() => {
-    fetch("/api/mural").then(async (response) => {
-      if (!response.ok) return;
-      setMessages(await response.json());
-    }).catch(() => setError("Não foi possível carregar o mural agora."));
+    fetch("/api/mural")
+      .then(async (response) => {
+        if (!response.ok) return;
+        setMessages(await response.json());
+      })
+      .catch(() => setError("Não foi possível carregar o mural agora."));
   }, []);
   const publish = async () => {
-    setSending(true); setError("");
-    const response = await fetch("/api/mural", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ body: message }) });
-    const data = await response.json();
-    setSending(false);
-    if (!response.ok) return setError(data.error || "Não foi possível publicar.");
-    setMessages((current) => [data.message, ...current]); setMessage("");
+    if (sending) return;
+    setSending(true);
+    setError("");
+    setFeedback(null);
+    try {
+      const response = await fetch("/api/mural", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ body: message }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.error || "Não foi possível publicar.");
+        setFeedback({
+          kind: response.status === 429 ? "warning" : "error",
+          text:
+            response.status === 429
+              ? "Aguarde para reenviar"
+              : "Falha ao enviar",
+        });
+        return;
+      }
+      setMessages((current) => [data.message, ...current]);
+      setMessage("");
+      setFeedback({ kind: "success", text: "Recado publicado!" });
+    } catch {
+      setError(
+        "Não foi possível confirmar o envio. Verifique sua conexão e tente novamente.",
+      );
+      setFeedback({ kind: "error", text: "Falha ao enviar" });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
     <div className="mural-widget">
+      <div
+        className="mural-feedback-region"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {feedback && (
+          <div className={`mural-feedback mural-feedback--${feedback.kind}`}>
+            <span aria-hidden="true">●</span>
+            {feedback.text}
+          </div>
+        )}
+      </div>
       <div className="mural-history" aria-label="Mensagens do mural">
-        {messages.length ? messages.map((item) => <article className="mural-message" key={item.id}><img src={item.avatarUrl} alt="" /><p><b>@{item.login}</b><br />{item.body}</p></article>) : <p className="mural-empty">Ainda não há recados. Deixe o primeiro.</p>}
+        {messages.length ? (
+          messages.map((item) => (
+            <article className="mural-message" key={item.id}>
+              <img src={item.avatarUrl} alt="" />
+              <p>
+                <b>@{item.login}</b>
+                <br />
+                {item.body}
+              </p>
+            </article>
+          ))
+        ) : (
+          <p className="mural-empty">Ainda não há recados. Deixe o primeiro.</p>
+        )}
       </div>
       <aside className="mural-avatars" aria-label="Participantes">
         <div>
@@ -40,21 +104,32 @@ export default function Mural({ onLogin }: { onLogin: () => void }) {
           <span>fabi</span>
         </div>
         <div className="mural-visitor-avatar" aria-label="Seu avatar">
-          {session?.user?.image ? <img src={session.user.image} alt="Seu avatar" /> : <span>?</span>}
+          {session?.user?.image ? (
+            <img src={session.user.image} alt="Seu avatar" />
+          ) : (
+            <span>?</span>
+          )}
           <span>{signedIn ? `@${session!.user.login}` : "você"}</span>
         </div>
       </aside>
-      <form className="mural-composer" onSubmit={(event) => event.preventDefault()}>
+      <form
+        className="mural-composer"
+        onSubmit={(event) => event.preventDefault()}
+      >
         <label htmlFor="mural-message">seu recado</label>
         <textarea
           id="mural-message"
           value={message}
-          disabled={!signedIn}
+          disabled={!signedIn || sending}
           onChange={(event) => setMessage(event.target.value)}
           placeholder="Entre com GitHub para deixar um recado"
         />
         {error && <p className="mural-error">{error}</p>}
-        <button type="button" disabled={sending} onClick={signedIn ? publish : onLogin}>
+        <button
+          type="button"
+          disabled={sending}
+          onClick={signedIn ? publish : onLogin}
+        >
           {sending ? "Publicando…" : signedIn ? "Publicar" : "Logar"}
         </button>
       </form>
@@ -68,7 +143,12 @@ export function MuralLogin() {
       <p className="mural-login-mark">●◕●</p>
       <h2>oi :)</h2>
       <p>Entre com sua conta para deixar um recado no mural da Fabi.</p>
-      <button type="button" onClick={() => signIn("github", { callbackUrl: "/?mural=1" })}>Entrar com GitHub</button>
+      <button
+        type="button"
+        onClick={() => signIn("github", { callbackUrl: "/?mural=1" })}
+      >
+        Entrar com GitHub
+      </button>
       <small>Seu @username e avatar serão exibidos no comentário.</small>
     </div>
   );
