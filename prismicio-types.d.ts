@@ -606,6 +606,18 @@ export interface SiteSettingsDocumentDataLegacyArticleRedirectsItem {
  * Content for Site settings documents
  */
 interface SiteSettingsDocumentData {
+  /** Profile name field in *Site settings*. */
+  name: prismic.KeyTextField;
+
+  /** Profile role field in *Site settings*. */
+  role: prismic.KeyTextField;
+
+  /** Profile description field in *Site settings*. */
+  description: prismic.RichTextField;
+
+  /** Profile avatar field in *Site settings*. */
+  avatar: prismic.ImageField<never>;
+
   /**
    * Contact heading field in *Site settings*
    *

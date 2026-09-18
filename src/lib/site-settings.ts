@@ -1,10 +1,18 @@
 import { copy, type Locale } from "./site.ts";
+import type { RichTextField } from "@prismicio/client";
 
 export const navigationKeys = ["about", "blog", "work", "contact"] as const;
 export type NavigationKey = (typeof navigationKeys)[number];
 export type NavigationItem = { key: NavigationKey; label: string };
 
 export type SiteSettings = {
+  profile: {
+    name: string;
+    role: string;
+    description: RichTextField;
+    avatarUrl: string;
+    avatarAlt: string;
+  };
   navigation: NavigationItem[];
   contact: {
     heading: string;
@@ -49,6 +57,17 @@ export function fallbackSettings(locale: Locale): SiteSettings {
   });
 
   return {
+    profile: {
+      name: "Fabiana Rodrigues",
+      role: "Front-end developer · frontfabi.dev",
+      description: [
+        { type: "paragraph", text: t.welcome, spans: [] },
+        { type: "paragraph", text: t.intro, spans: [] },
+      ] as RichTextField,
+      avatarUrl:
+        "https://images.prismic.io/frontfabi/Z5jwp5bqstJ998QQ_fabi_avatar.gif?auto=format%2Ccompress&rect=41%2C0%2C611%2C611&w=3840&fit=max",
+      avatarAlt: "Avatar animado de Fabiana Rodrigues",
+    },
     navigation: [
       { key: "about", label: t.about },
       { key: "blog", label: t.blog },
@@ -148,6 +167,10 @@ function httpsUrl(value: unknown, fallback: string) {
   }
 }
 
+function richText(value: unknown, fallback: RichTextField): RichTextField {
+  return Array.isArray(value) ? (value as RichTextField) : fallback;
+}
+
 export function settingsFromDocument(
   document: unknown,
   locale: Locale,
@@ -170,6 +193,13 @@ export function settingsFromDocument(
     : fallback.legacyArticleRedirects;
 
   return {
+    profile: {
+      name: text(data.name, fallback.profile.name),
+      role: text(data.role, fallback.profile.role),
+      description: richText(data.description, fallback.profile.description),
+      avatarUrl: httpsUrl(data.avatar, fallback.profile.avatarUrl),
+      avatarAlt: text(record(data.avatar).alt, fallback.profile.avatarAlt),
+    },
     navigation: isValidNavigation(navigation) ? navigation : fallback.navigation,
     contact: {
       heading: text(data.contact_heading, fallback.contact.heading),

@@ -21,6 +21,7 @@ import {
 } from "@/lib/content";
 import { copy, locales, localizedPath, parsePath, siteUrl } from "@/lib/site";
 import type { SiteDocument } from "@/lib/content-types";
+import type { SiteSettings } from "@/lib/site-settings";
 import {
   devArticlePath,
   getDevArticle,
@@ -29,6 +30,30 @@ import {
 } from "@/lib/devto";
 
 type Props = { params: Promise<{ path?: string[] }> };
+
+function ProfileActions({ settings }: { settings: SiteSettings }) {
+  return (
+    <div className="welcome-actions" aria-label="Redes sociais">
+      <a
+        className="button"
+        href={settings.contact.linkedinUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        LinkedIn ↗
+      </a>
+      <a
+        className="button"
+        href={settings.contact.instagramUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Instagram ↗
+      </a>
+    </div>
+  );
+}
+
 async function resolve(path?: string[]) {
   const { locale, segments } = parsePath(path);
   if (!(await availableLocales()).includes(locale)) notFound();
@@ -259,44 +284,37 @@ export default async function SitePage({ params }: Props) {
         <div className="welcome-body">
           <div className="welcome-heading">
             <div>
-              <span className="sticker">EST. 2007</span>
-              <h1>Fabiana Rodrigues</h1>
-              <p className="eyebrow">Front-end developer · frontfabi.dev</p>
+              <h1>{settings.profile.name}</h1>
+              <p className="eyebrow">{settings.profile.role}</p>
             </div>
             <img
               className="welcome-avatar"
-              src="https://images.prismic.io/frontfabi/Z5jwp5bqstJ998QQ_fabi_avatar.gif?auto=format%2Ccompress&rect=41%2C0%2C611%2C611&w=3840&fit=max"
-              alt="Avatar animado de Fabiana Rodrigues"
+              src={settings.profile.avatarUrl}
+              alt={settings.profile.avatarAlt}
             />
           </div>
-          {doc?.type === "page" && doc.data.home_intro?.length ? (
-            <PrismicRichText field={doc.data.home_intro} />
-          ) : (
-            <>
-              <p>{t.welcome}</p>
-              <p>{t.intro}</p>
-            </>
-          )}
-          <div className="welcome-actions" aria-label="Redes sociais">
-            <a
-              className="button"
-              href={settings.contact.linkedinUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              LinkedIn ↗
-            </a>
-            <a
-              className="button"
-              href={settings.contact.instagramUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Instagram ↗
-            </a>
-          </div>
+          <PrismicRichText field={settings.profile.description} />
+          <ProfileActions settings={settings} />
         </div>
       </div>
+    );
+  else if (section === "sobre")
+    content = (
+      <article className="document-sheet about-page">
+        <div className="welcome-heading">
+          <div>
+            <h1>{settings.profile.name}</h1>
+            <p className="eyebrow">{settings.profile.role}</p>
+          </div>
+          <img
+            className="welcome-avatar"
+            src={settings.profile.avatarUrl}
+            alt={settings.profile.avatarAlt}
+          />
+        </div>
+        <PrismicRichText field={settings.profile.description} />
+        <ProfileActions settings={settings} />
+      </article>
     );
   else
     content = (

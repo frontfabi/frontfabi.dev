@@ -56,6 +56,31 @@ test("keeps the published Instagram URL for the home social link", () => {
   assert.equal(settings.contact.instagramUrl, "https://instagram.com/frontfabi");
 });
 
+test("keeps the published profile content as rich text", () => {
+  const description = [
+    { type: "paragraph", text: "Interfaces acessíveis e performáticas.", spans: [] },
+  ];
+  const settings = settingsFromDocument(
+    {
+      data: {
+        name: "Fabi Rodrigues",
+        role: "Senior Frontend Engineer / UX Designer",
+        description,
+        avatar: {
+          url: "https://images.prismic.io/frontfabi/fabi-avatar.gif",
+          alt: "Avatar animado de Fabi Rodrigues",
+        },
+      },
+    },
+    "pt",
+  );
+
+  assert.equal(settings.profile.name, "Fabi Rodrigues");
+  assert.equal(settings.profile.role, "Senior Frontend Engineer / UX Designer");
+  assert.deepEqual(settings.profile.description, description);
+  assert.equal(settings.profile.avatarUrl, "https://images.prismic.io/frontfabi/fabi-avatar.gif");
+});
+
 test("SitePage loads settings before rendering the DEV blog", async () => {
   const page = await readFile(
     new URL("../src/app/[[...path]]/page.tsx", import.meta.url),
