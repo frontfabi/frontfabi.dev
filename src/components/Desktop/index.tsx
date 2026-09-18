@@ -28,7 +28,7 @@ export function PixelIcon({
     />
   );
 }
-type Utility = "contact" | "settings" | "help" | "computer" | "game" | "mural" | "mural-login";
+type Utility = "settings" | "help" | "computer" | "game" | "mural" | "mural-login";
 const cv =
   "https://frontfabi.cdn.prismic.io/frontfabi/Z5WBKZbqstJ992ad_CVFabiRodrigues-EN.pdf";
 export default function Desktop({
@@ -65,7 +65,6 @@ export default function Desktop({
   const [reset, setReset] = useState(0);
   const [orders, setOrders] = useState<Record<string, number>>({
     main: 2,
-    contact: 1,
     detail: 3,
   });
   useEffect(() => {
@@ -82,7 +81,6 @@ export default function Desktop({
       [id]: nextWindowOrder(prev),
     }));
   const launch = (id: Utility) => {
-    if (id === "contact") trackEvent("open_contact");
     if (id === "game") trackEvent("open_game");
     setOpen((prev) => (prev.includes(id) ? prev : [...prev, id]));
     setMinimizedUtilities((prev) => prev.filter((item) => item !== id));
@@ -97,15 +95,13 @@ export default function Desktop({
     setMinimizedUtilities([]);
     setMenu(null);
     setReset((n) => n + 1);
-    setOrders({ main: 2, contact: 1 });
+    setOrders({ main: 2 });
   };
   const apps = [
     { key: "about", path: "/sobre", label: t.about },
     { key: "blog", path: "/blog", label: t.blog },
     { key: "work", path: "/trabalho", label: t.work },
   ];
-  const contact =
-    locale === "pt" ? "Contato" : locale === "es" ? "Contacto" : "Contact";
   const computer =
     locale === "pt"
       ? "Meu computador"
@@ -128,39 +124,11 @@ export default function Desktop({
           router.push(localizedPath(item.path, locale));
         },
       })),
-      { label: contact, action: () => launch("contact") },
       {
         label: "CV.pdf ↗",
         action: () => {
           trackCvDownload("system_menu");
           window.open(cv, "_blank", "noopener,noreferrer");
-        },
-      },
-    ],
-    Edit: [{ label: t.settings, action: () => launch("settings") }],
-    View: [
-      { label: computer, action: () => launch("computer") },
-      { label: t.language, action: () => launch("settings") },
-    ],
-    Window: [
-      {
-        label: t.restore,
-        action: () => {
-          setMainOpen(true);
-          setMinimized(false);
-          focus("main");
-        },
-      },
-      {
-        label: locale === "pt" ? "Organizar janelas" : "Arrange windows",
-        action: () => setReset((n) => n + 1),
-      },
-      {
-        label: t.close,
-        action: () => {
-          setMainOpen(false);
-          setDetailOpen(false);
-          setOpen([]);
         },
       },
     ],
@@ -281,12 +249,6 @@ export default function Desktop({
             <span>{item.label}</span>
           </Link>
         ))}
-        <button onClick={() => launch("contact")} className="app-icon">
-          <span className="icon-tile">
-            <PixelIcon name="mail" />
-          </span>
-          <span>{contact}</span>
-        </button>
         <a
           href={cv}
           target="_blank"
@@ -331,7 +293,6 @@ export default function Desktop({
                     □ {item.label}
                   </Link>
                 ))}
-                <button onClick={() => launch("contact")}>□ {contact}</button>
               </nav>
               <div className="document-content">{children}</div>
             </div>
@@ -342,9 +303,7 @@ export default function Desktop({
           <Window
             key={`${id}-${reset}`}
             title={
-              id === "contact"
-                ? `${contact}.txt`
-                : id === "settings"
+              id === "settings"
                   ? t.settings
                   : id === "computer"
                     ? computer
@@ -371,34 +330,7 @@ export default function Desktop({
               setMinimizedUtilities((prev) => prev.filter((item) => item !== id));
             }}
           >
-            {id === "contact" ? (
-              <div className="contact-content">
-                <p>{t.contact}</p>
-                <a
-                  className="email-link"
-                  href="mailto:falacomigo@frontfabi.dev"
-                >
-                  falacomigo@frontfabi.dev
-                </a>
-                <div className="contact-links">
-                  <a
-                    href="https://linkedin.com/in/frontfabi"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    ● LinkedIn
-                  </a>
-                  <a
-                    href={cv}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => trackCvDownload("contact_window")}
-                  >
-                    ● Download CV
-                  </a>
-                </div>
-              </div>
-            ) : id === "settings" ? (
+            {id === "settings" ? (
               <div className="utility-content">
                 <h2>{t.language}</h2>
                 <nav className="language-options" aria-label={t.language}>

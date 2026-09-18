@@ -34,7 +34,10 @@ type Props = { params: Promise<{ path?: string[] }> };
 
 function ProfileActions({ settings }: { settings: SiteSettings }) {
   return (
-    <div className="welcome-actions" aria-label="Redes sociais">
+    <div className="welcome-actions" aria-label="Links de contato">
+      <a className="button" href={`mailto:${settings.contact.email}`}>
+        {settings.contact.email}
+      </a>
       <a
         className="button"
         href={settings.contact.linkedinUrl}

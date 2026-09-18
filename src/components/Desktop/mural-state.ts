@@ -1,7 +1,7 @@
-export type MuralWindow = "contact" | "mural";
+export type MuralWindow = "mural";
 
 export function initialMuralWindows(muralRequested: boolean): MuralWindow[] {
-  return muralRequested ? ["contact", "mural"] : ["contact"];
+  return muralRequested ? ["mural"] : [];
 }
 
 export function nextWindowOrder(orders: Record<string, number>) {

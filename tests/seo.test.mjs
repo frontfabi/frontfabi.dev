@@ -41,7 +41,11 @@ test("mural links retain the post path through login", () => {
 });
 
 test("a detail URL requesting the mural keeps its window open after navigation", () => {
-  assert.deepEqual(initialMuralWindows(true), ["contact", "mural"]);
+  assert.deepEqual(initialMuralWindows(true), ["mural"]);
+});
+
+test("the home desktop starts without utility windows", () => {
+  assert.deepEqual(initialMuralWindows(false), []);
 });
 
 test("a mural requested from a detail is raised above the existing windows", () => {

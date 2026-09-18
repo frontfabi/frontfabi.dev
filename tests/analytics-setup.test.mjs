@@ -16,13 +16,12 @@ test("loads analytics only through the consent-aware component", async () => {
   assert.match(environment, /^NEXT_PUBLIC_GA_ID=/m);
 });
 
-test("tracks the portfolio calls to action", async () => {
+test("tracks the interactive portfolio calls to action", async () => {
   const desktop = await readFile(
     new URL("../src/components/Desktop/index.tsx", import.meta.url),
     "utf8",
   );
 
-  assert.match(desktop, /trackEvent\("open_contact"\)/);
   assert.match(desktop, /trackEvent\("open_game"\)/);
   assert.match(desktop, /trackEvent\("download_cv"/);
 });
