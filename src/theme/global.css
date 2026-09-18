@@ -854,6 +854,11 @@ button:disabled,
   transform: translate(2px, 2px);
   box-shadow: 2px 2px var(--ink);
 }
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 .meta {
   font-size: 16px;
   color: var(--link);

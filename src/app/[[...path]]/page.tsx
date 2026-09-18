@@ -277,9 +277,24 @@ export default async function SitePage({ params }: Props) {
               <p>{t.intro}</p>
             </>
           )}
-          <Link className="button" href={href("/sobre")}>
-            {t.about} ↗
-          </Link>
+          <div className="welcome-actions" aria-label="Redes sociais">
+            <a
+              className="button"
+              href={settings.contact.linkedinUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              LinkedIn ↗
+            </a>
+            <a
+              className="button"
+              href={settings.contact.instagramUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Instagram ↗
+            </a>
+          </div>
         </div>
       </div>
     );

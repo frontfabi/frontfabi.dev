@@ -41,6 +41,21 @@ test("keeps fallback navigation when CMS navigation is incomplete", () => {
   );
 });
 
+test("keeps the published Instagram URL for the home social link", () => {
+  const settings = settingsFromDocument(
+    {
+      data: {
+        instagram_url: {
+          url: "https://instagram.com/frontfabi",
+        },
+      },
+    },
+    "pt",
+  );
+
+  assert.equal(settings.contact.instagramUrl, "https://instagram.com/frontfabi");
+});
+
 test("SitePage loads settings before rendering the DEV blog", async () => {
   const page = await readFile(
     new URL("../src/app/[[...path]]/page.tsx", import.meta.url),

@@ -13,6 +13,8 @@ export type SiteSettings = {
     cvLabel: string;
     linkedinUrl: string;
     linkedinLabel: string;
+    instagramUrl: string;
+    instagramLabel: string;
   };
   blog: {
     devUsername: string;
@@ -60,6 +62,8 @@ export function fallbackSettings(locale: Locale): SiteSettings {
       cvLabel: "CV.pdf",
       linkedinUrl: "https://linkedin.com/in/frontfabi",
       linkedinLabel: "LinkedIn",
+      instagramUrl: "https://instagram.com/frontfabi",
+      instagramLabel: "Instagram",
     },
     blog: {
       devUsername: "frontfabi",
@@ -130,9 +134,14 @@ function text(value: unknown, fallback: string) {
 }
 
 function httpsUrl(value: unknown, fallback: string) {
-  if (typeof value !== "string") return fallback;
+  const url =
+    typeof value === "string"
+      ? value
+      : typeof record(value).url === "string"
+        ? record(value).url
+        : "";
   try {
-    return new URL(value).protocol === "https:" ? value : fallback;
+    return new URL(url).protocol === "https:" ? url : fallback;
   } catch {
     return fallback;
   }
@@ -168,6 +177,8 @@ export function settingsFromDocument(
       cvLabel: text(data.cv_label, fallback.contact.cvLabel),
       linkedinUrl: httpsUrl(data.linkedin_url, fallback.contact.linkedinUrl),
       linkedinLabel: text(data.linkedin_label, fallback.contact.linkedinLabel),
+      instagramUrl: httpsUrl(data.instagram_url, fallback.contact.instagramUrl),
+      instagramLabel: fallback.contact.instagramLabel,
     },
     blog: {
       devUsername: text(data.dev_username, fallback.blog.devUsername),
