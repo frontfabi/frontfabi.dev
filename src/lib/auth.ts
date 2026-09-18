@@ -11,7 +11,7 @@ export const { handlers, auth } = NextAuth({
     session({ session, token }) {
       if (token.sub && token.login) {
         session.user.githubId = token.sub;
-        session.user.login = token.login;
+        session.user.login = String(token.login);
       }
       return session;
     },
