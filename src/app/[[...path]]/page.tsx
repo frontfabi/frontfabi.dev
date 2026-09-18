@@ -20,6 +20,7 @@ import {
 } from "@/lib/content";
 import { copy, locales, localizedPath, parsePath, siteUrl } from "@/lib/site";
 import type { SiteDocument } from "@/lib/content-types";
+import { devArticlePath, getDevArticle, type DevArticleDetail } from "@/lib/devto";
 
 type Props = { params: Promise<{ path?: string[] }> };
 async function resolve(path?: string[]) {
@@ -31,9 +32,17 @@ async function resolve(path?: string[]) {
     permanentRedirect(localizedPath("/", locale));
   const section = segments[0] || "home";
   let doc: SiteDocument | null = null;
+  let devArticle: DevArticleDetail | null = null;
   if (segments.length <= 1) doc = await document("page", section, locale);
-  else if (segments.length === 2 && section === "articles")
-    doc = await document("post", segments[1], locale);
+  else if (segments.length === 2 && section === "articles") {
+    const devArticleId = /^dev-(\d+)-/.exec(segments[1])?.[1];
+    if (devArticleId) {
+      const settings = await siteSettings(locale);
+      devArticle = await getDevArticle(Number(devArticleId), settings.blog.devUsername);
+      if (devArticle && segments[1] !== devArticlePath(devArticle).slice("/articles/".length))
+        permanentRedirect(localizedPath(devArticlePath(devArticle), locale));
+    } else doc = await document("post", segments[1], locale);
+  }
   else if (
     segments.length === 3 &&
     section === "trabalho" &&
@@ -46,22 +55,24 @@ async function resolve(path?: string[]) {
     );
   else notFound();
   if (
-    !doc &&
+    !doc && !devArticle &&
     (segments.length > 1 ||
       !["home", "sobre", "blog", "trabalho"].includes(section))
   )
     notFound();
-  return { locale, section, doc };
+  return { locale, section, doc, devArticle };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { path } = await params;
-  const { locale, section, doc } = await resolve(path);
+  const { locale, section, doc, devArticle } = await resolve(path);
   const t = copy[locale];
   const title =
     section === "home"
       ? "Fabiana Rodrigues · Front-end developer"
-      : doc
+      : devArticle
+        ? devArticle.title
+        : doc
         ? documentTitle(doc)
         : section === "sobre"
           ? t.about
@@ -70,21 +81,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             : t.work;
   const data = doc?.data;
   const description =
-    data && "meta_description" in data ? data.meta_description : t.intro;
+    devArticle?.description || (data && "meta_description" in data ? data.meta_description : t.intro);
   const image =
-    data && "meta_image" in data
+    devArticle?.coverImage || (data && "meta_image" in data
       ? data.meta_image.url
       : data && "cover" in data
         ? data.cover.url
-        : undefined;
+        : undefined);
   const hasContent =
-    Boolean(doc) ||
+    Boolean(doc) || Boolean(devArticle) ||
     section === "home" ||
     (section === "blog" && (await documents("post", locale)).length > 0) ||
     (section === "trabalho" &&
       ((await documents("experience", locale)).length > 0 ||
         (await documents("community", locale)).length > 0));
-  const canonical = `/${(path || []).join("/")}`;
+  const canonical = devArticle?.url || `/${(path || []).join("/")}`;
   const languages = doc
     ? Object.fromEntries(
         Object.entries(languageLinks(doc)).map(([lang, url]) => [
@@ -104,7 +115,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: description || undefined,
       url: canonical,
       locale: locales[locale].replace("-", "_"),
-      type: doc?.type === "post" ? "article" : "website",
+      type: doc?.type === "post" || devArticle ? "article" : "website",
       ...(image ? { images: [image] } : {}),
     },
   };
@@ -112,7 +123,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SitePage({ params }: Props) {
   const { path } = await params;
-  const { locale, section, doc } = await resolve(path);
+  const { locale, section, doc, devArticle } = await resolve(path);
   const settings = await siteSettings(locale);
   const t = copy[locale];
   const href = (path: string) => localizedPath(path, locale);
@@ -158,6 +169,23 @@ export default async function SitePage({ params }: Props) {
           ))}
         </div>
         <Link href={href("/trabalho")}>← {t.work}</Link>
+      </article>
+    );
+  else if (devArticle)
+    content = (
+      <article className="document-sheet dev-article">
+        <h1>{devArticle.title}</h1>
+        <p className="meta">
+          {dateLabel(devArticle.publishedAt, locale)} · {devArticle.tags.join(" · ")} · {devArticle.readingTimeMinutes} min
+        </p>
+        {devArticle.coverImage && <img src={devArticle.coverImage} alt="" />}
+        <div className="dev-article-body">{devArticle.bodyMarkdown}</div>
+        <p className="dev-article-actions">
+          <a href={devArticle.url} target="_blank" rel="noreferrer">
+            {settings.blog.readOnDevLabel} — {devArticle.positiveReactionsCount} {settings.blog.reactionsLabel} · {devArticle.commentsCount} {settings.blog.commentsLabel} ↗
+          </a>
+        </p>
+        <Link href={href("/blog")}>← {t.blog}</Link>
       </article>
     );
   else if (doc?.type === "post")
@@ -239,7 +267,7 @@ export default async function SitePage({ params }: Props) {
       </>
     );
   const isDetail =
-    doc && ["post", "experience", "community"].includes(doc.type);
+    Boolean(devArticle) || Boolean(doc && ["post", "experience", "community"].includes(doc.type));
   return (
     <Desktop
       key={`${locale}/${path?.join("/")}`}
@@ -248,7 +276,7 @@ export default async function SitePage({ params }: Props) {
       title={title}
       languages={languages}
       detail={isDetail ? content : undefined}
-      detailTitle={isDetail ? `${doc.uid}.txt` : undefined}
+      detailTitle={isDetail ? devArticle ? `dev-${devArticle.id}.txt` : `${doc!.uid}.txt` : undefined}
       detailBack={href(app === "work" ? "/trabalho" : "/blog")}
     >
       {isDetail ? (

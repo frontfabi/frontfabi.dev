@@ -6,7 +6,7 @@ import {
   documentTitle,
   dateLabel,
 } from "@/lib/content";
-import { getDevArticles, type DevArticle } from "@/lib/devto";
+import { devArticlePath, getDevArticles, type DevArticle } from "@/lib/devto";
 import type { SiteSettings } from "@/lib/site-settings";
 import type { SiteDocument } from "@/lib/content-types";
 export async function WorkIndex({ locale }: { locale: Locale }) {
@@ -90,14 +90,14 @@ export async function BlogIndex({ settings }: { settings: SiteSettings }) {
         <ul className="file-list posts">
           {posts.map((post) => (
             <li key={post.id}>
-              <a href={post.url} target="_blank" rel="noreferrer">
+              <Link href={devArticlePath(post)}>
                 <strong>{post.title}</strong>
                 <span>{post.description}</span>
                 <span className="meta">
                   {post.tags.join(" · ")} · {post.readingTimeMinutes} min · {post.positiveReactionsCount} {settings.blog.reactionsLabel} · {post.commentsCount} {settings.blog.commentsLabel}
                 </span>
-                <span>{settings.blog.readOnDevLabel} ↗</span>
-              </a>
+                <span>{settings.copy.read} →</span>
+              </Link>
             </li>
           ))}
         </ul>
