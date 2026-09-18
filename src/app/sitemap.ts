@@ -4,7 +4,9 @@ import {
   documentPath,
   availableLocales,
   languageLinks,
+  siteSettings,
 } from "@/lib/content";
+import { getDevArticles } from "@/lib/devto";
 import { siteUrl, locales, localizedPath } from "@/lib/site";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const langs = await availableLocales();
@@ -39,15 +41,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!entries.some((entry) => entry.url === url)) entries.push({ url });
   }
   for (const locale of langs) {
+    const blogPosts = await getDevArticles(
+      (await siteSettings(locale)).blog.devUsername,
+    ).catch(() => []);
     for (const [path, types] of [
       ["/blog", ["post"]],
       ["/trabalho", ["experience", "community"]],
     ] as [string, string[]][]) {
-      const hasContent = groups
-        .flat()
-        .some(
-          (doc) => doc.lang === locales[locale] && types.includes(doc.type),
-        );
+      const hasContent =
+        (path === "/blog" && blogPosts.length > 0) ||
+        groups
+          .flat()
+          .some(
+            (doc) => doc.lang === locales[locale] && types.includes(doc.type),
+          );
       const url = new URL(localizedPath(path as string, locale), siteUrl).href;
       if (hasContent && !entries.some((entry) => entry.url === url))
         entries.push({ url });

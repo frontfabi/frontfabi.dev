@@ -18,7 +18,7 @@ export async function WorkIndex({ locale }: { locale: Locale }) {
   ]);
   return (
     <>
-      <h1>{t.work}</h1>
+      <h2>{t.work}</h2>
       <nav className="category-links" aria-label={t.folders}>
         <a href="#professional">{t.professional}</a>
         <a href="#community">{t.community}</a>
@@ -43,24 +43,30 @@ export async function WorkIndex({ locale }: { locale: Locale }) {
                 })
                 .map((item) => (
                   <li key={item.id}>
-                    <Link href={documentPath(item)!}>
-                      <strong>{documentTitle(item)}</strong>
-                      {item.type === "experience" && (
-                        <>
-                          <span>{item.data.jobTitle}</span>
+                    <article aria-labelledby={`work-${item.id}`}>
+                      <Link
+                        href={documentPath(item)!}
+                        aria-labelledby={`work-${item.id}`}
+                      >
+                        <h3 id={`work-${item.id}`}>{documentTitle(item)}</h3>
+                        {item.type === "experience" && (
+                          <>
+                            <span>{item.data.jobTitle}</span>
+                            <span className="meta">
+                              {dateLabel(item.data.startDate, locale)} —{" "}
+                              {dateLabel(item.data.endDate, locale) ||
+                                t.present}
+                            </span>
+                          </>
+                        )}
+                        {item.type === "community" && (
                           <span className="meta">
-                            {dateLabel(item.data.startDate, locale)} —{" "}
-                            {dateLabel(item.data.endDate, locale) || t.present}
+                            {item.data.contribution} ·{" "}
+                            {dateLabel(item.data.date, locale)}
                           </span>
-                        </>
-                      )}
-                      {item.type === "community" && (
-                        <span className="meta">
-                          {item.data.contribution} ·{" "}
-                          {dateLabel(item.data.date, locale)}
-                        </span>
-                      )}
-                    </Link>
+                        )}
+                      </Link>
+                    </article>
                   </li>
                 ))}
             </ul>
@@ -81,7 +87,7 @@ export async function BlogIndex({ settings }: { settings: SiteSettings }) {
   }
   return (
     <>
-      <h1>{settings.blog.title}</h1>
+      <h2>{settings.blog.title}</h2>
       {settings.blog.intro && <p>{settings.blog.intro}</p>}
       <p className="meta">
         {posts.length} {settings.copy.posts.toLowerCase()}
@@ -90,14 +96,21 @@ export async function BlogIndex({ settings }: { settings: SiteSettings }) {
         <ul className="file-list posts">
           {posts.map((post) => (
             <li key={post.id}>
-              <Link href={devArticlePath(post)}>
-                <strong>{post.title}</strong>
-                <span>{post.description}</span>
-                <span className="meta">
-                  {post.tags.join(" · ")} · {post.readingTimeMinutes} min · {post.positiveReactionsCount} {settings.blog.reactionsLabel} · {post.commentsCount} {settings.blog.commentsLabel}
-                </span>
-                <span>{settings.copy.read} →</span>
-              </Link>
+              <article aria-labelledby={`post-${post.id}`}>
+                <Link
+                  href={devArticlePath(post)}
+                  aria-labelledby={`post-${post.id}`}
+                >
+                  <h3 id={`post-${post.id}`}>{post.title}</h3>
+                  <p>{post.description}</p>
+                  <span className="meta">
+                    {post.tags.join(" · ")} · {post.readingTimeMinutes} min ·{" "}
+                    {post.positiveReactionsCount} {settings.blog.reactionsLabel}{" "}
+                    · {post.commentsCount} {settings.blog.commentsLabel}
+                  </span>
+                  <span aria-hidden="true">{settings.copy.read} →</span>
+                </Link>
+              </article>
             </li>
           ))}
         </ul>

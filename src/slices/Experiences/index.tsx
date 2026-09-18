@@ -11,14 +11,21 @@ export default function Experiences({
         {slice.primary.xp_list.map(({ experience }) =>
           isFilled.contentRelationship(experience) ? (
             <li key={experience.id}>
-              <Link
-                href={
-                  experience.url || `/trabalho/profissional/${experience.uid}`
-                }
+              <article
+                aria-labelledby={`experience-${slice.id}-${experience.id}`}
               >
-                <strong>{experience.data?.company || experience.uid}</strong>
-                <span>{experience.data?.jobTitle}</span>
-              </Link>
+                <Link
+                  aria-labelledby={`experience-${slice.id}-${experience.id}`}
+                  href={
+                    experience.url || `/trabalho/profissional/${experience.uid}`
+                  }
+                >
+                  <h3 id={`experience-${slice.id}-${experience.id}`}>
+                    {experience.data?.company || experience.uid}
+                  </h3>
+                  <span>{experience.data?.jobTitle}</span>
+                </Link>
+              </article>
             </li>
           ) : null,
         )}

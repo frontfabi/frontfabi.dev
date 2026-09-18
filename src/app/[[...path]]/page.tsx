@@ -20,7 +20,12 @@ import {
 } from "@/lib/content";
 import { copy, locales, localizedPath, parsePath, siteUrl } from "@/lib/site";
 import type { SiteDocument } from "@/lib/content-types";
-import { devArticlePath, getDevArticle, type DevArticleDetail } from "@/lib/devto";
+import {
+  devArticlePath,
+  getDevArticle,
+  getDevArticles,
+  type DevArticleDetail,
+} from "@/lib/devto";
 
 type Props = { params: Promise<{ path?: string[] }> };
 async function resolve(path?: string[]) {
@@ -38,12 +43,17 @@ async function resolve(path?: string[]) {
     const devArticleId = /^dev-(\d+)-/.exec(segments[1])?.[1];
     if (devArticleId) {
       const settings = await siteSettings(locale);
-      devArticle = await getDevArticle(Number(devArticleId), settings.blog.devUsername);
-      if (devArticle && segments[1] !== devArticlePath(devArticle).slice("/articles/".length))
+      devArticle = await getDevArticle(
+        Number(devArticleId),
+        settings.blog.devUsername,
+      );
+      if (
+        devArticle &&
+        segments[1] !== devArticlePath(devArticle).slice("/articles/".length)
+      )
         permanentRedirect(localizedPath(devArticlePath(devArticle), locale));
     } else doc = await document("post", segments[1], locale);
-  }
-  else if (
+  } else if (
     segments.length === 3 &&
     section === "trabalho" &&
     ["profissional", "comunidade"].includes(segments[1])
@@ -55,7 +65,8 @@ async function resolve(path?: string[]) {
     );
   else notFound();
   if (
-    !doc && !devArticle &&
+    !doc &&
+    !devArticle &&
     (segments.length > 1 ||
       !["home", "sobre", "blog", "trabalho"].includes(section))
   )
@@ -73,25 +84,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : devArticle
         ? devArticle.title
         : doc
-        ? documentTitle(doc)
-        : section === "sobre"
-          ? t.about
-          : section === "blog"
-            ? t.blog
-            : t.work;
+          ? documentTitle(doc)
+          : section === "sobre"
+            ? t.about
+            : section === "blog"
+              ? t.blog
+              : t.work;
   const data = doc?.data;
   const description =
-    devArticle?.description || (data && "meta_description" in data ? data.meta_description : t.intro);
+    devArticle?.description ||
+    (data && "meta_description" in data ? data.meta_description : t.intro);
   const image =
-    devArticle?.coverImage || (data && "meta_image" in data
+    devArticle?.coverImage ||
+    (data && "meta_image" in data
       ? data.meta_image.url
       : data && "cover" in data
         ? data.cover.url
         : undefined);
+  const blogHasPosts =
+    section === "blog"
+      ? await getDevArticles((await siteSettings(locale)).blog.devUsername)
+          .then((posts) => posts.length > 0)
+          .catch(() => false)
+      : false;
   const hasContent =
-    Boolean(doc) || Boolean(devArticle) ||
+    Boolean(doc) ||
+    Boolean(devArticle) ||
     section === "home" ||
-    (section === "blog" && (await documents("post", locale)).length > 0) ||
+    blogHasPosts ||
     (section === "trabalho" &&
       ((await documents("experience", locale)).length > 0 ||
         (await documents("community", locale)).length > 0));
@@ -176,13 +196,16 @@ export default async function SitePage({ params }: Props) {
       <article className="document-sheet dev-article">
         <h1>{devArticle.title}</h1>
         <p className="meta">
-          {dateLabel(devArticle.publishedAt, locale)} · {devArticle.tags.join(" · ")} · {devArticle.readingTimeMinutes} min
+          {dateLabel(devArticle.publishedAt, locale)} ·{" "}
+          {devArticle.tags.join(" · ")} · {devArticle.readingTimeMinutes} min
         </p>
         {devArticle.coverImage && <img src={devArticle.coverImage} alt="" />}
         <div className="dev-article-body">{devArticle.bodyMarkdown}</div>
         <p className="dev-article-actions">
           <a href={devArticle.url} target="_blank" rel="noreferrer">
-            {settings.blog.readOnDevLabel} — {devArticle.positiveReactionsCount} {settings.blog.reactionsLabel} · {devArticle.commentsCount} {settings.blog.commentsLabel} ↗
+            {settings.blog.readOnDevLabel} — {devArticle.positiveReactionsCount}{" "}
+            {settings.blog.reactionsLabel} · {devArticle.commentsCount}{" "}
+            {settings.blog.commentsLabel} ↗
           </a>
         </p>
         <Link href={href("/blog")}>← {t.blog}</Link>
@@ -267,7 +290,8 @@ export default async function SitePage({ params }: Props) {
       </>
     );
   const isDetail =
-    Boolean(devArticle) || Boolean(doc && ["post", "experience", "community"].includes(doc.type));
+    Boolean(devArticle) ||
+    Boolean(doc && ["post", "experience", "community"].includes(doc.type));
   return (
     <Desktop
       key={`${locale}/${path?.join("/")}`}
@@ -276,7 +300,13 @@ export default async function SitePage({ params }: Props) {
       title={title}
       languages={languages}
       detail={isDetail ? content : undefined}
-      detailTitle={isDetail ? devArticle ? `dev-${devArticle.id}.txt` : `${doc!.uid}.txt` : undefined}
+      detailTitle={
+        isDetail
+          ? devArticle
+            ? `dev-${devArticle.id}.txt`
+            : `${doc!.uid}.txt`
+          : undefined
+      }
       detailBack={href(app === "work" ? "/trabalho" : "/blog")}
     >
       {isDetail ? (

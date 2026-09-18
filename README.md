@@ -4,9 +4,10 @@ Site pessoal em Next.js App Router, com Prismic como headless CMS e hospedagem n
 
 ## Desenvolvimento
 
-Requer Node.js 22 LTS ou superior.
+Requer Node.js 24.x (também definido em `engines.node` e `.nvmrc`) e npm. O projeto utiliza somente `package-lock.json` para instalações reproduzíveis; na Vercel, mantenha o Node 24.x e o comando de instalação `npm ci`.
 
 ```sh
+nvm use
 npm ci
 npm run dev
 ```
@@ -60,3 +61,7 @@ A integração com dev.to não foi ativada: o Prismic permanece a fonte editoria
 ## Assets
 
 Fontes locais Silkscreen e VT323, distribuídas sob SIL Open Font License; licenças em `public/fonts`. Ícones Streamline Pixel, CC BY 4.0; licença e origem em `public/icons/LICENSE.md`, com crédito na janela de ajuda. As imagens de referência orientaram o layout; não foram incorporadas como screenshots do site.
+
+## Escala dos títulos
+
+Os títulos usam a fonte Born2bSporty FS existente e a escala Major Third (1,250), com base de 1rem (16px por padrão): h1 48,83px, h2 39,06px, h3 31,25px, h4 25px, h5 20px e h6 16px. Os tokens `--heading-h1` a `--heading-h6` ficam em `src/theme/global.css`. A escala se mantém no celular; os títulos podem quebrar linhas. O corpo em VT323 e os tamanhos dos controles do desktop permanecem independentes.
