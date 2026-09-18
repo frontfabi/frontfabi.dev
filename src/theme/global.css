@@ -113,7 +113,10 @@ h6 {
   overflow-wrap: anywhere;
 }
 a,
-button,
+button {
+  font-family: "Pixel Sport", monospace;
+  font-size: 16px;
+}
 input,
 select,
 textarea {
@@ -477,6 +480,13 @@ button:disabled,
   padding: 16px 6px;
   background: var(--eggshell);
   font-size: 11px;
+}
+.system-menus button,
+.dropdown button,
+.window-sidebar {
+  font-family: "Pixel Sport", monospace;
+  font-size: 14px;
+  line-height: 1.2;
 }
 .window-sidebar a,
 .window-sidebar button {
@@ -888,7 +898,7 @@ samp {
     gap: 0;
   }
   .system-menus button {
-    font-size: 8px;
+    font-size: 14px;
     padding: 4px;
   }
   .dropdown {
@@ -900,7 +910,7 @@ samp {
   }
   .dropdown button {
     padding: 12px;
-    font-size: 11px;
+    font-size: 14px;
   }
   .panel-language {
     font-size: 9px;
@@ -976,7 +986,7 @@ samp {
     padding: 6px 8px;
     border-right: 0;
     border-bottom: 2px solid var(--ink);
-    font-size: 9px;
+    font-size: 14px;
     position: sticky;
     top: 0;
     z-index: 1;

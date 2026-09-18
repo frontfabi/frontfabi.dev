@@ -13,8 +13,28 @@ test("uses Pixel Sport for interactive interface elements", () => {
   assert.match(css, /font-family: "Pixel Sport";/);
   assert.match(
     css,
-    /a,\nbutton,\ninput,\nselect,\ntextarea \{\n  font-family: "Pixel Sport", monospace;/,
+    /a,\nbutton \{\n  font-family: "Pixel Sport", monospace;/,
+  );
+  assert.match(
+    css,
+    /input,\nselect,\ntextarea \{\n  font-family: "Pixel Sport", monospace;/,
   );
   assert.ok(existsSync(new URL("public/fonts/PixelSport-Regular.ttf", projectRoot)));
   assert.ok(existsSync(new URL("public/fonts/PixelSport-LICENSE.txt", projectRoot)));
+});
+
+test("uses the requested interface font sizes", () => {
+  const css = readFileSync(
+    new URL("src/theme/global.css", projectRoot),
+    "utf8",
+  );
+
+  assert.match(
+    css,
+    /a,\nbutton \{\n  font-family: "Pixel Sport", monospace;\n  font-size: 16px;/,
+  );
+  assert.match(
+    css,
+    /\.system-menus button,\n\.dropdown button,\n\.window-sidebar \{\n  font-family: "Pixel Sport", monospace;\n  font-size: 14px;/,
+  );
 });
