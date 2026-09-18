@@ -40,6 +40,7 @@ export const copy = {
     posts: "Publicações",
     folders: "Pastas",
     read: "Ler publicação",
+    commentOnMural: "Comentar no mural",
     status: "Feito de código e curiosidade.",
   },
   en: {
@@ -72,6 +73,7 @@ export const copy = {
     posts: "Posts",
     folders: "Folders",
     read: "Read post",
+    commentOnMural: "Comment on the mural",
     status: "Made of code and curiosity.",
   },
   es: {
@@ -104,6 +106,7 @@ export const copy = {
     posts: "Publicaciones",
     folders: "Carpetas",
     read: "Leer publicación",
+    commentOnMural: "Comentar en el mural",
     status: "Hecho de código y curiosidad.",
   },
 } as const;

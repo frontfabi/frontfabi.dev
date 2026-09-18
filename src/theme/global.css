@@ -952,6 +952,20 @@ p {
   background: var(--eggshell);
   padding: 12px;
 }
+.mural-post-link {
+  display: inline-block;
+  margin: 18px 0;
+  border: 2px solid var(--ink);
+  background: var(--putty);
+  box-shadow: 2px 2px var(--ink);
+  padding: 9px 12px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.mural-post-link:hover,
+.mural-post-link:focus-visible {
+  background: var(--amber);
+}
 .empty-state {
   border: 1px solid var(--line);
   padding: 18px;

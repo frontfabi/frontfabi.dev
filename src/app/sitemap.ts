@@ -8,6 +8,7 @@ import {
 } from "@/lib/content";
 import { getDevArticles } from "@/lib/devto";
 import { siteUrl, locales, localizedPath } from "@/lib/site";
+import { staticSitePaths } from "@/lib/seo";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const langs = await availableLocales();
   const groups = await Promise.all(
@@ -36,9 +37,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ]
       : [];
   });
-  for (const locale of langs) {
-    const url = new URL(localizedPath("/", locale), siteUrl).href;
-    if (!entries.some((entry) => entry.url === url)) entries.push({ url });
+  for (const path of staticSitePaths(langs)) {
+    const url = new URL(path, siteUrl).href;
+    const section = path.endsWith("/sobre") ? "/sobre" : "/";
+    if (!entries.some((entry) => entry.url === url))
+      entries.push({
+        url,
+        alternates: {
+          languages: Object.fromEntries(
+            langs.map((locale) => [
+              locales[locale],
+              new URL(localizedPath(section, locale), siteUrl).href,
+            ]),
+          ),
+        },
+      });
   }
   for (const locale of langs) {
     const blogPosts = await getDevArticles(

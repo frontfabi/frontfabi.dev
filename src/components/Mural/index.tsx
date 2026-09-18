@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import type { MuralMessage } from "@/lib/mural";
+import { muralPath } from "@/lib/seo";
 
 const ownerAvatar =
   "https://images.prismic.io/frontfabi/Z5jwp5bqstJ998QQ_fabi_avatar.gif?auto=format%2Ccompress&rect=41%2C0%2C611%2C611&w=3840&fit=max";
@@ -18,7 +19,7 @@ export default function Mural({ onLogin }: { onLogin: () => void }) {
   } | null>(null);
   useEffect(() => {
     if (!feedback) return;
-    const timeout = window.setTimeout(() => setFeedback(null), 600);
+    const timeout = window.setTimeout(() => setFeedback(null), 2000);
     return () => window.clearTimeout(timeout);
   }, [feedback]);
   const { data: session } = useSession();
@@ -145,7 +146,9 @@ export function MuralLogin() {
       <p>Entre com sua conta para deixar um recado no mural da Fabi.</p>
       <button
         type="button"
-        onClick={() => signIn("github", { callbackUrl: "/?mural=1" })}
+        onClick={() =>
+          signIn("github", { callbackUrl: muralPath(window.location.pathname) })
+        }
       >
         Entrar com GitHub
       </button>

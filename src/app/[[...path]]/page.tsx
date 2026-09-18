@@ -20,6 +20,7 @@ import {
   siteSettings,
 } from "@/lib/content";
 import { copy, locales, localizedPath, parsePath, siteUrl } from "@/lib/site";
+import { metadataDescription, muralPath, profileTitle } from "@/lib/seo";
 import type { SiteDocument } from "@/lib/content-types";
 import type { SiteSettings } from "@/lib/site-settings";
 import {
@@ -104,29 +105,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { path } = await params;
   const { locale, section, doc, devArticle } = await resolve(path);
   const t = copy[locale];
+  const profile =
+    section === "home" || section === "sobre"
+      ? await siteSettings(locale)
+      : null;
   const title =
     section === "home"
-      ? "Fabiana Rodrigues · Front-end developer"
+      ? profileTitle(profile!.profile.name, profile!.profile.role)
       : devArticle
         ? devArticle.title
         : doc
           ? documentTitle(doc)
           : section === "sobre"
-            ? t.about
+            ? profileTitle(profile!.profile.name, profile!.profile.role)
             : section === "blog"
               ? t.blog
               : t.work;
   const data = doc?.data;
   const description =
     devArticle?.description ||
-    (data && "meta_description" in data ? data.meta_description : t.intro);
+    (data && "meta_description" in data
+      ? metadataDescription(data.meta_description, t.intro)
+      : profile
+        ? metadataDescription(asText(profile.profile.description), t.intro)
+        : t.intro);
   const image =
     devArticle?.coverImage ||
     (data && "meta_image" in data
       ? data.meta_image.url
       : data && "cover" in data
         ? data.cover.url
-        : undefined);
+        : profile?.profile.avatarUrl);
   const blogHasPosts =
     section === "blog"
       ? await getDevArticles((await siteSettings(locale)).blog.devUsername)
@@ -137,6 +146,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     Boolean(doc) ||
     Boolean(devArticle) ||
     section === "home" ||
+    section === "sobre" ||
     blogHasPosts ||
     (section === "trabalho" &&
       ((await documents("experience", locale)).length > 0 ||
@@ -149,7 +159,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url,
         ]),
       )
-    : undefined;
+    : ["home", "sobre", "blog", "trabalho"].includes(section)
+      ? Object.fromEntries(
+          (await availableLocales()).map((lang) => [
+            locales[lang],
+            localizedPath(section === "home" ? "/" : `/${section}`, lang),
+          ]),
+        )
+      : undefined;
   return {
     title:
       data && "meta_title" in data && data.meta_title ? data.meta_title : title,
@@ -161,7 +178,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: description || undefined,
       url: canonical,
       locale: locales[locale].replace("-", "_"),
+      siteName: "frontfabi.dev",
       type: doc?.type === "post" || devArticle ? "article" : "website",
+      ...(image
+        ? { images: [{ url: image, alt: profile?.profile.avatarAlt }] }
+        : {}),
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description: description || undefined,
       ...(image ? { images: [image] } : {}),
     },
   };
@@ -197,6 +223,9 @@ export default async function SitePage({ params }: Props) {
       <article className="document-sheet">
         <h1>{documentTitle(doc)}</h1>
         <ProfessionalRow {...doc.data} locale={locale} />
+        <Link className="mural-post-link" href={muralPath(documentPath(doc)!)}>
+          ☁ {t.commentOnMural}
+        </Link>
         <Link href={href("/trabalho")}>← {t.work}</Link>
       </article>
     );
@@ -234,6 +263,12 @@ export default async function SitePage({ params }: Props) {
             {settings.blog.commentsLabel} ↗
           </a>
         </p>
+        <Link
+          className="mural-post-link"
+          href={muralPath(localizedPath(devArticlePath(devArticle), locale))}
+        >
+          ☁ {t.commentOnMural}
+        </Link>
         <Link href={href("/blog")}>← {t.blog}</Link>
       </article>
     );
@@ -253,6 +288,9 @@ export default async function SitePage({ params }: Props) {
             ),
           }}
         />
+        <Link className="mural-post-link" href={muralPath(documentPath(doc)!)}>
+          ☁ {t.commentOnMural}
+        </Link>
         <Link href={href("/blog")}>← {t.blog}</Link>
         <script
           type="application/ld+json"
@@ -335,6 +373,21 @@ export default async function SitePage({ params }: Props) {
   const isDetail =
     Boolean(devArticle) ||
     Boolean(doc && ["post", "experience", "community"].includes(doc.type));
+  const profileSchema =
+    section === "home" || section === "sobre"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: settings.profile.name,
+          jobTitle: settings.profile.role,
+          url: new URL(section === "home" ? "/" : "/sobre", siteUrl).href,
+          image: settings.profile.avatarUrl,
+          sameAs: [
+            settings.contact.linkedinUrl,
+            settings.contact.instagramUrl,
+          ],
+        }
+      : null;
   return (
     <Desktop
       key={`${locale}/${path?.join("/")}`}
@@ -359,7 +412,17 @@ export default async function SitePage({ params }: Props) {
           <BlogIndex settings={settings} />
         )
       ) : (
-        content
+        <>
+          {content}
+          {profileSchema && (
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(profileSchema).replace(/</g, "\\u003c"),
+              }}
+            />
+          )}
+        </>
       )}
     </Desktop>
   );
