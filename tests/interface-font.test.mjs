@@ -13,7 +13,7 @@ test("uses Pixel Sport for interactive interface elements", () => {
   assert.match(css, /font-family: "Pixel Sport";/);
   assert.match(
     css,
-    /a,\nbutton \{\n  font-family: "Pixel Sport", monospace;/,
+    /a,\nbutton,\nfooter \{\n  font-family: "Pixel Sport", monospace;/,
   );
   assert.match(
     css,
@@ -31,7 +31,7 @@ test("uses the requested interface font sizes", () => {
 
   assert.match(
     css,
-    /a,\nbutton \{\n  font-family: "Pixel Sport", monospace;\n  font-size: 16px;/,
+    /a,\nbutton,\nfooter \{\n  font-family: "Pixel Sport", monospace;\n  font-size: 16px;/,
   );
   assert.match(
     css,
