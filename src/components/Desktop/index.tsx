@@ -450,16 +450,18 @@ export default function Desktop({
               focus("main");
             }}
             aria-current={app === item.key ? "page" : undefined}
+            className={`dock-item dock-${item.key}`}
           >
             <PixelIcon name={item.key} />
             <span>{item.label}</span>
           </Link>
         ))}
-        <button onClick={() => launch("contact")}>
+        <button className="dock-item dock-contact" onClick={() => launch("contact")}>
           <PixelIcon name="mail" />
           <span>{contact}</span>
         </button>
         <a
+          className="dock-item dock-cv"
           href={cv}
           target="_blank"
           rel="noreferrer"
@@ -468,7 +470,11 @@ export default function Desktop({
           <PixelIcon name="blog" />
           <span>CV</span>
         </a>
-        <button onClick={() => launch("settings")}>
+        <button className="mobile-dock-game" onClick={() => launch("game")}>
+          <PixelIcon name="game" />
+          <span>game.py</span>
+        </button>
+        <button className="dock-settings" onClick={() => launch("settings")}>
           <PixelIcon name="settings" />
           <span>Config</span>
         </button>

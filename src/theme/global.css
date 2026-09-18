@@ -764,6 +764,9 @@ button:disabled,
 .dock .restore-task {
   font-size: 20px;
 }
+.dock .mobile-dock-game {
+  display: none;
+}
 .restore-task span {
   font-size: 7px;
 }
@@ -1052,16 +1055,6 @@ p {
     padding: 0 3px;
   }
   .desktop-icons {
-    position: relative;
-    top: auto;
-    left: auto;
-    width: auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 32px 12px;
-    padding: 64px 20px 24px;
-  }
-  .inside-app .desktop-icons {
     display: none;
   }
   .app-icon {
@@ -1159,6 +1152,31 @@ p {
     border-radius: 0;
     font-size: 7px;
     min-width: 0;
+  }
+  .dock .dock-about {
+    order: 1;
+  }
+  .dock .dock-work {
+    order: 2;
+  }
+  .dock .dock-blog {
+    order: 3;
+  }
+  .dock .dock-contact {
+    order: 4;
+  }
+  .dock .dock-cv {
+    order: 5;
+  }
+  .dock .mobile-dock-game {
+    display: flex;
+    order: 6;
+  }
+  .dock .dock-settings {
+    display: none;
+  }
+  .dock .restore-task {
+    display: none;
   }
   .dock img {
     width: 26px;
