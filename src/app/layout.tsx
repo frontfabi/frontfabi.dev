@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { PrismicPreview } from "@prismicio/next";
 import { repositoryName } from "@/prismicio";
 import { siteUrl } from "@/lib/site";
+import Analytics from "@/components/Analytics";
 import "../theme/global.css";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -24,6 +25,7 @@ export default async function RootLayout({
       <body>
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
         <PrismicPreview repositoryName={repositoryName} />
+        <Analytics />
       </body>
     </html>
   );

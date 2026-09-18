@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { copy, localizedPath, type Locale } from "@/lib/site";
+import { trackEvent } from "@/lib/analytics";
 import SnakeGame from "@/components/SnakeGame";
 import Window from "./Window";
 
@@ -65,6 +66,8 @@ export default function Desktop({
       [id]: Math.max(0, ...Object.values(prev)) + 1,
     }));
   const launch = (id: Utility) => {
+    if (id === "contact") trackEvent("open_contact");
+    if (id === "game") trackEvent("open_game");
     setOpen((prev) => (prev.includes(id) ? prev : [...prev, id]));
     focus(id);
     setMenu(null);
@@ -94,6 +97,8 @@ export default function Desktop({
     action();
     setMenu(null);
   };
+  const trackCvDownload = (source: string) =>
+    trackEvent("download_cv", { source });
   const menus: Record<string, { label: string; action: () => void }[]> = {
     File: [
       ...apps.map((item) => ({
@@ -107,7 +112,10 @@ export default function Desktop({
       { label: contact, action: () => launch("contact") },
       {
         label: "CV.pdf ↗",
-        action: () => window.open(cv, "_blank", "noopener,noreferrer"),
+        action: () => {
+          trackCvDownload("system_menu");
+          window.open(cv, "_blank", "noopener,noreferrer");
+        },
       },
     ],
     Edit: [{ label: t.settings, action: () => launch("settings") }],
@@ -235,7 +243,13 @@ export default function Desktop({
           </span>
           <span>{contact}</span>
         </button>
-        <a href={cv} target="_blank" rel="noreferrer" className="app-icon">
+        <a
+          href={cv}
+          target="_blank"
+          rel="noreferrer"
+          className="app-icon"
+          onClick={() => trackCvDownload("desktop_icon")}
+        >
           <span className="icon-tile">
             <PixelIcon name="blog" />
           </span>
@@ -319,7 +333,12 @@ export default function Desktop({
                   >
                     ● LinkedIn
                   </a>
-                  <a href={cv} target="_blank" rel="noreferrer">
+                  <a
+                    href={cv}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => trackCvDownload("contact_window")}
+                  >
                     ● Download CV
                   </a>
                 </div>
@@ -440,7 +459,12 @@ export default function Desktop({
           <PixelIcon name="mail" />
           <span>{contact}</span>
         </button>
-        <a href={cv} target="_blank" rel="noreferrer">
+        <a
+          href={cv}
+          target="_blank"
+          rel="noreferrer"
+          onClick={() => trackCvDownload("dock")}
+        >
           <PixelIcon name="blog" />
           <span>CV</span>
         </a>
