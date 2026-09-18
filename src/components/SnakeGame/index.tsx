@@ -56,16 +56,24 @@ export default function SnakeGame() {
         <span>score: {game.score}</span>
         <span>{game.status === "game-over" ? "game over" : "game.py"}</span>
       </div>
-      <div className="snake-board" role="application" aria-label="Jogo da cobrinha">
-        {Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, index) => {
-          const point = `${index % GRID_SIZE},${Math.floor(index / GRID_SIZE)}`;
-          return (
-            <span
-              key={point}
-              className={occupied.has(point) ? "snake-cell snake" : point === food ? "snake-cell food" : "snake-cell"}
-            />
-          );
-        })}
+      <div className="snake-board-wrap">
+        <div className="snake-board" role="application" aria-label="Jogo da cobrinha">
+          {Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, index) => {
+            const point = `${index % GRID_SIZE},${Math.floor(index / GRID_SIZE)}`;
+            return (
+              <span
+                key={point}
+                className={occupied.has(point) ? "snake-cell snake" : point === food ? "snake-cell food" : "snake-cell"}
+              />
+            );
+          })}
+        </div>
+        {game.status === "game-over" && (
+          <div className="snake-game-over" role="alert">
+            <span>game over</span>
+            <button onClick={() => setGame(() => createGame())}>reiniciar</button>
+          </div>
+        )}
       </div>
       <div className="snake-controls" aria-label="Controles da cobrinha">
         {controls.map((control) => (
@@ -77,9 +85,11 @@ export default function SnakeGame() {
             {control.symbol}
           </button>
         ))}
-        <button className="snake-reset" onClick={() => setGame(() => createGame())}>
-          reiniciar
-        </button>
+        {game.status !== "game-over" && (
+          <button className="snake-reset" onClick={() => setGame(() => createGame())}>
+            reiniciar
+          </button>
+        )}
       </div>
       <p>setas ou WASD para jogar</p>
     </div>

@@ -58,9 +58,9 @@ test("does not allow an immediate reverse", () => {
   assert.equal(changeDirection(game, "left").direction, "right");
 });
 
-test("starts slowly and gains speed every 20 points", () => {
+test("starts slowly and gains speed every 10 points", () => {
   assert.equal(getGameInterval(0), 350);
-  assert.equal(getGameInterval(19), 350);
-  assert.equal(getGameInterval(20), 340);
-  assert.equal(getGameInterval(40), 330);
+  assert.equal(getGameInterval(9), 350);
+  assert.equal(getGameInterval(10), 340);
+  assert.equal(getGameInterval(20), 330);
 });

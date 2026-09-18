@@ -613,6 +613,9 @@ button:disabled,
   background: var(--eggshell);
   aspect-ratio: 1;
 }
+.snake-board-wrap {
+  position: relative;
+}
 .snake-cell {
   min-width: 0;
   border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
@@ -622,6 +625,33 @@ button:disabled,
 }
 .snake-cell.food {
   background: var(--pink);
+}
+.snake-game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 210px;
+  padding: 14px 18px;
+  border: 3px solid var(--ink);
+  background: var(--pink);
+  box-shadow: 6px 6px var(--ink);
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%) rotate(-7deg);
+}
+.snake-game-over button {
+  border: 2px solid var(--ink);
+  background: var(--white);
+  padding: 5px 8px;
+  font-size: 14px;
+  line-height: 1;
 }
 .snake-controls {
   display: grid;

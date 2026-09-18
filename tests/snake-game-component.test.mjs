@@ -9,4 +9,6 @@ test("resets the game by invoking its factory instead of passing it to React's s
   );
 
   assert.match(component, /onClick=\{\(\) => setGame\(\(\) => createGame\(\)\)\}/);
+  assert.match(component, /className="snake-game-over"/);
+  assert.match(component, /role="alert"/);
 });

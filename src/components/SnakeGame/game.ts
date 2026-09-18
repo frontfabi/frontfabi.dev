@@ -13,7 +13,7 @@ export type SnakeGame = {
 const initialSnake = [{ x: 8, y: 8 }];
 
 export function getGameInterval(score: number) {
-  return 350 - Math.floor(score / 20) * 10;
+  return 350 - Math.floor(score / 10) * 10;
 }
 
 const opposite: Record<Direction, Direction> = {
