@@ -21,32 +21,30 @@ type PickContentRelationshipFieldData<
 > =
   // Content relationship fields
   {
-    [TSubRelationship in Extract<
-      TRelationship["fields"][number],
-      prismic.CustomTypeModelFetchContentRelationshipLevel1
-    > as TSubRelationship["id"]]: ContentRelationshipFieldWithData<
-      TSubRelationship["customtypes"],
-      TLang
-    >;
+    [
+      TSubRelationship in Extract<
+        TRelationship["fields"][number],
+        prismic.CustomTypeModelFetchContentRelationshipLevel1
+      > as TSubRelationship["id"]
+    ]: ContentRelationshipFieldWithData<TSubRelationship["customtypes"], TLang>;
   } & // Group
   {
-    [TGroup in Extract<
-      TRelationship["fields"][number],
-      | prismic.CustomTypeModelFetchGroupLevel1
-      | prismic.CustomTypeModelFetchGroupLevel2
-    > as TGroup["id"]]: TData[TGroup["id"]] extends prismic.GroupField<
-      infer TGroupData
-    >
+    [
+      TGroup in Extract<
+        TRelationship["fields"][number],
+        | prismic.CustomTypeModelFetchGroupLevel1
+        | prismic.CustomTypeModelFetchGroupLevel2
+      > as TGroup["id"]
+    ]: TData[TGroup["id"]] extends prismic.GroupField<infer TGroupData>
       ? prismic.GroupField<
           PickContentRelationshipFieldData<TGroup, TGroupData, TLang>
         >
       : never;
   } & // Other fields
   {
-    [TFieldKey in Extract<
-      TRelationship["fields"][number],
-      string
-    >]: TFieldKey extends keyof TData ? TData[TFieldKey] : never;
+    [
+      TFieldKey in Extract<TRelationship["fields"][number], string>
+    ]: TFieldKey extends keyof TData ? TData[TFieldKey] : never;
   };
 
 type ContentRelationshipFieldWithData<
@@ -55,10 +53,9 @@ type ContentRelationshipFieldWithData<
     | readonly (prismic.CustomTypeModelFetchCustomTypeLevel2 | string)[],
   TLang extends string = string,
 > = {
-  [ID in Exclude<
-    TCustomType[number],
-    string
-  >["id"]]: prismic.ContentRelationshipField<
+  [
+    ID in Exclude<TCustomType[number], string>["id"]
+  ]: prismic.ContentRelationshipField<
     ID,
     TLang,
     PickContentRelationshipFieldData<
@@ -155,6 +152,17 @@ interface CommunityDocumentData {
    * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
    */
   gallery: prismic.GroupField<Simplify<CommunityDocumentDataGalleryItem>>;
+
+  /**
+   * Description field in *Community*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: community.description
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  description: prismic.RichTextField;
 }
 
 /**
@@ -351,7 +359,8 @@ export type ExperienceDocument<Lang extends string = string> =
     Lang
   >;
 
-type PageDocumentDataSlicesSlice = NavigationSlice | ExperiencesSlice;
+type PageDocumentDataSlicesSlice =
+  NavigationSlice | ExperiencesSlice | RichTextSlice;
 
 /**
  * Content for Page documents
@@ -377,7 +386,18 @@ interface PageDocumentData {
    * - **Tab**: Main
    * - **Documentation**: https://prismic.io/docs/slices
    */
-  slices: prismic.SliceZone<PageDocumentDataSlicesSlice> /**
+  slices: prismic.SliceZone<PageDocumentDataSlicesSlice>;
+
+  /**
+   * Home introduction field in *Page*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: page.home_intro
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  home_intro: prismic.RichTextField; /**
    * Meta Title field in *Page*
    *
    * - **Field Type**: Text
@@ -385,7 +405,7 @@ interface PageDocumentData {
    * - **API ID Path**: page.meta_title
    * - **Tab**: SEO & Metadata
    * - **Documentation**: https://prismic.io/docs/fields/text
-   */;
+   */
   meta_title: prismic.KeyTextField;
 
   /**
@@ -422,6 +442,367 @@ interface PageDocumentData {
  */
 export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
+
+/**
+ * Content for Blog post documents
+ */
+interface PostDocumentData {
+  /**
+   * Title field in *Blog post*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: post.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * Excerpt field in *Blog post*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: post.excerpt
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  excerpt: prismic.KeyTextField;
+
+  /**
+   * Publication date field in *Blog post*
+   *
+   * - **Field Type**: Date
+   * - **Placeholder**: *None*
+   * - **API ID Path**: post.published_date
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/date
+   */
+  published_date: prismic.DateField;
+
+  /**
+   * Category field in *Blog post*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: post.category
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  category: prismic.SelectField<"Front-end" | "Carreira" | "Comunidade">;
+
+  /**
+   * Body field in *Blog post*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: post.body
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * Cover field in *Blog post*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: post.cover
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  cover: prismic.ImageField<never>; /**
+   * Meta title field in *Blog post*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: post.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  meta_title: prismic.KeyTextField;
+
+  /**
+   * Meta description field in *Blog post*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: post.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  meta_description: prismic.KeyTextField;
+}
+
+/**
+ * Blog post document from Prismic
+ *
+ * - **API ID**: `post`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type PostDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<PostDocumentData>, "post", Lang>;
+
+/**
+ * Item in *Site settings → Navigation items*
+ */
+export interface SiteSettingsDocumentDataNavigationItemsItem {
+  /**
+   * Key field in *Site settings → Navigation items*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.navigation_items[].key
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  key: prismic.SelectField<"about" | "blog" | "work" | "contact">;
+
+  /**
+   * Label field in *Site settings → Navigation items*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.navigation_items[].label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  label: prismic.KeyTextField;
+}
+
+/**
+ * Item in *Site settings → Legacy article redirects*
+ */
+export interface SiteSettingsDocumentDataLegacyArticleRedirectsItem {
+  /**
+   * Legacy UID field in *Site settings → Legacy article redirects*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.legacy_article_redirects[].legacy_uid
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  legacy_uid: prismic.KeyTextField;
+
+  /**
+   * DEV article URL field in *Site settings → Legacy article redirects*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.legacy_article_redirects[].dev_article_url
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  dev_article_url: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Content for Site settings documents
+ */
+interface SiteSettingsDocumentData {
+  /**
+   * Contact heading field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.contact_heading
+   * - **Tab**: Contact
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  contact_heading: prismic.KeyTextField;
+
+  /**
+   * Contact email field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.contact_email
+   * - **Tab**: Contact
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  contact_email: prismic.KeyTextField;
+
+  /**
+   * CV link field in *Site settings*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.cv_link
+   * - **Tab**: Contact
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  cv_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+
+  /**
+   * CV label field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.cv_label
+   * - **Tab**: Contact
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  cv_label: prismic.KeyTextField;
+
+  /**
+   * LinkedIn URL field in *Site settings*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.linkedin_url
+   * - **Tab**: Contact
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  linkedin_url: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+
+  /**
+   * Instagram URL field in *Site settings*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.instagram_url
+   * - **Tab**: Contact
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  instagram_url: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >; /**
+   * Navigation items field in *Site settings*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.navigation_items[]
+   * - **Tab**: Navigation
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  navigation_items: prismic.GroupField<
+    Simplify<SiteSettingsDocumentDataNavigationItemsItem>
+  >; /**
+   * DEV username field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.dev_username
+   * - **Tab**: Blog
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  dev_username: prismic.KeyTextField;
+
+  /**
+   * Blog title field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.blog_title
+   * - **Tab**: Blog
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  blog_title: prismic.KeyTextField;
+
+  /**
+   * Blog intro field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.blog_intro
+   * - **Tab**: Blog
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  blog_intro: prismic.KeyTextField;
+
+  /**
+   * Empty blog message field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.blog_empty_message
+   * - **Tab**: Blog
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  blog_empty_message: prismic.KeyTextField;
+
+  /**
+   * Read on DEV label field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.blog_read_on_dev_label
+   * - **Tab**: Blog
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  blog_read_on_dev_label: prismic.KeyTextField;
+
+  /**
+   * Reactions label field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.blog_reactions_label
+   * - **Tab**: Blog
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  blog_reactions_label: prismic.KeyTextField;
+
+  /**
+   * Comments label field in *Site settings*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.blog_comments_label
+   * - **Tab**: Blog
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  blog_comments_label: prismic.KeyTextField; /**
+   * Legacy article redirects field in *Site settings*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: site_settings.legacy_article_redirects[]
+   * - **Tab**: Legacy redirects
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  legacy_article_redirects: prismic.GroupField<
+    Simplify<SiteSettingsDocumentDataLegacyArticleRedirectsItem>
+  >;
+}
+
+/**
+ * Site settings document from Prismic
+ *
+ * - **API ID**: `site_settings`
+ * - **Repeatable**: `false`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type SiteSettingsDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithoutUID<
+    Simplify<SiteSettingsDocumentData>,
+    "site_settings",
+    Lang
+  >;
 
 /**
  * Content for skill documents
@@ -467,6 +848,8 @@ export type AllDocumentTypes =
   | EducationDocument
   | ExperienceDocument
   | PageDocument
+  | PostDocument
+  | SiteSettingsDocument
   | SkillDocument;
 
 /**
@@ -709,6 +1092,12 @@ declare module "@prismicio/client" {
       PageDocument,
       PageDocumentData,
       PageDocumentDataSlicesSlice,
+      PostDocument,
+      PostDocumentData,
+      SiteSettingsDocument,
+      SiteSettingsDocumentData,
+      SiteSettingsDocumentDataNavigationItemsItem,
+      SiteSettingsDocumentDataLegacyArticleRedirectsItem,
       SkillDocument,
       SkillDocumentData,
       AllDocumentTypes,

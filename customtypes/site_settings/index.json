@@ -6,33 +6,141 @@
   "status": true,
   "json": {
     "Contact": {
-      "contact_heading": { "type": "Text", "config": { "label": "Contact heading" } },
-      "contact_email": { "type": "Text", "config": { "label": "Contact email" } },
-      "cv_link": { "type": "Link", "config": { "label": "CV link", "select": "web" } },
-      "cv_label": { "type": "Text", "config": { "label": "CV label" } },
-      "linkedin_url": { "type": "Link", "config": { "label": "LinkedIn URL", "select": "web" } },
-      "linkedin_label": { "type": "Text", "config": { "label": "LinkedIn label" } }
+      "contact_heading": {
+        "type": "Text",
+        "config": {
+          "label": "Contact heading"
+        }
+      },
+      "contact_email": {
+        "type": "Text",
+        "config": {
+          "label": "Contact email"
+        }
+      },
+      "cv_link": {
+        "type": "Link",
+        "config": {
+          "label": "CV link",
+          "select": "web"
+        }
+      },
+      "cv_label": {
+        "type": "Text",
+        "config": {
+          "label": "CV label"
+        }
+      },
+      "linkedin_url": {
+        "type": "Link",
+        "config": {
+          "label": "LinkedIn URL",
+          "select": "web"
+        }
+      },
+      "instagram_url": {
+        "type": "Link",
+        "config": {
+          "label": "Instagram URL",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      }
     },
     "Navigation": {
-      "navigation_items": { "type": "Group", "config": { "label": "Navigation items", "repeat": true, "fields": {
-        "key": { "type": "Select", "config": { "label": "Key", "options": ["about", "blog", "work", "contact"] } },
-        "label": { "type": "Text", "config": { "label": "Label" } }
-      } } }
+      "navigation_items": {
+        "type": "Group",
+        "config": {
+          "label": "Navigation items",
+          "repeat": true,
+          "fields": {
+            "key": {
+              "type": "Select",
+              "config": {
+                "label": "Key",
+                "options": ["about", "blog", "work", "contact"]
+              }
+            },
+            "label": {
+              "type": "Text",
+              "config": {
+                "label": "Label"
+              }
+            }
+          }
+        }
+      }
     },
     "Blog": {
-      "dev_username": { "type": "Text", "config": { "label": "DEV username" } },
-      "blog_title": { "type": "Text", "config": { "label": "Blog title" } },
-      "blog_intro": { "type": "Text", "config": { "label": "Blog intro" } },
-      "blog_empty_message": { "type": "Text", "config": { "label": "Empty blog message" } },
-      "blog_read_on_dev_label": { "type": "Text", "config": { "label": "Read on DEV label" } },
-      "blog_reactions_label": { "type": "Text", "config": { "label": "Reactions label" } },
-      "blog_comments_label": { "type": "Text", "config": { "label": "Comments label" } }
+      "dev_username": {
+        "type": "Text",
+        "config": {
+          "label": "DEV username"
+        }
+      },
+      "blog_title": {
+        "type": "Text",
+        "config": {
+          "label": "Blog title"
+        }
+      },
+      "blog_intro": {
+        "type": "Text",
+        "config": {
+          "label": "Blog intro"
+        }
+      },
+      "blog_empty_message": {
+        "type": "Text",
+        "config": {
+          "label": "Empty blog message"
+        }
+      },
+      "blog_read_on_dev_label": {
+        "type": "Text",
+        "config": {
+          "label": "Read on DEV label"
+        }
+      },
+      "blog_reactions_label": {
+        "type": "Text",
+        "config": {
+          "label": "Reactions label"
+        }
+      },
+      "blog_comments_label": {
+        "type": "Text",
+        "config": {
+          "label": "Comments label"
+        }
+      }
     },
     "Legacy redirects": {
-      "legacy_article_redirects": { "type": "Group", "config": { "label": "Legacy article redirects", "repeat": true, "fields": {
-        "legacy_uid": { "type": "Text", "config": { "label": "Legacy UID" } },
-        "dev_article_url": { "type": "Link", "config": { "label": "DEV article URL", "select": "web" } }
-      } } }
+      "legacy_article_redirects": {
+        "type": "Group",
+        "config": {
+          "label": "Legacy article redirects",
+          "repeat": true,
+          "fields": {
+            "legacy_uid": {
+              "type": "Text",
+              "config": {
+                "label": "Legacy UID"
+              }
+            },
+            "dev_article_url": {
+              "type": "Link",
+              "config": {
+                "label": "DEV article URL",
+                "select": "web"
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
