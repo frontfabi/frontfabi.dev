@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   changeDirection,
   createGame,
+  getGameInterval,
   GRID_SIZE,
   stepGame,
   type Direction,
@@ -18,6 +19,7 @@ const controls: { direction: Direction; label: string; symbol: string }[] = [
 
 export default function SnakeGame() {
   const [game, setGame] = useState(createGame);
+  const gameInterval = getGameInterval(game.score);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -41,9 +43,9 @@ export default function SnakeGame() {
 
   useEffect(() => {
     if (game.status !== "playing") return;
-    const timer = window.setInterval(() => setGame((current) => stepGame(current)), 150);
+    const timer = window.setInterval(() => setGame((current) => stepGame(current)), gameInterval);
     return () => window.clearInterval(timer);
-  }, [game.status]);
+  }, [game.status, gameInterval]);
 
   const occupied = new Set(game.snake.map((point) => `${point.x},${point.y}`));
   const food = `${game.food.x},${game.food.y}`;
