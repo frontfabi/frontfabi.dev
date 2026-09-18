@@ -15,7 +15,7 @@ export const copy = {
     blog: "Blog",
     work: "Trabalho",
     desktop: "Área de trabalho",
-    welcome: "Bem-vinda ao meu cantinho da internet.",
+    welcome: "Boas-vindas ao meu cantinho da internet.",
     intro: "Pessoas, código e as coisas que aprendo pelo caminho.",
     hint: "Escolha um aplicativo para explorar.",
     settings: "Configurações",

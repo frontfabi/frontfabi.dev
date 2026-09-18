@@ -72,7 +72,6 @@ export default function Desktop({
     setDetailOpen(false);
     setMainOpen(true);
     setMinimized(false);
-    setOpen(["contact"]);
     setMenu(null);
     setReset((n) => n + 1);
     setOrders({ main: 2, contact: 1 });
@@ -158,7 +157,7 @@ export default function Desktop({
       <header className="system-panel">
         <h1 className="brand">
           <Link href={localizedPath("/", locale)} onClick={restoreHome}>
-            ● frontfabi
+            frontfabi
           </Link>
         </h1>
         <nav className="system-menus" aria-label="Menu">

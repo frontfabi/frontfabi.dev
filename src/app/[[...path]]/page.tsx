@@ -5,6 +5,7 @@ import { asText } from "@prismicio/client";
 import { PrismicRichText, SliceZone } from "@prismicio/react";
 import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
 import Desktop from "@/components/Desktop";
+import MarkdownContent from "@/components/MarkdownContent";
 import { WorkIndex, BlogIndex } from "@/components/ContentIndexes";
 import { ProfessionalRow } from "@/components/ProfessionalRow";
 import { components } from "@/slices";
@@ -200,7 +201,7 @@ export default async function SitePage({ params }: Props) {
           {devArticle.tags.join(" · ")} · {devArticle.readingTimeMinutes} min
         </p>
         {devArticle.coverImage && <img src={devArticle.coverImage} alt="" />}
-        <div className="dev-article-body">{devArticle.bodyMarkdown}</div>
+        <MarkdownContent>{devArticle.bodyMarkdown}</MarkdownContent>
         <p className="dev-article-actions">
           <a href={devArticle.url} target="_blank" rel="noreferrer">
             {settings.blog.readOnDevLabel} — {devArticle.positiveReactionsCount}{" "}

@@ -4,12 +4,6 @@
   font-weight: 400;
   font-display: swap;
 }
-@font-face {
-  font-family: VT323;
-  src: url("/fonts/VT323-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-display: swap;
-}
 
 :root {
   /* Major Third: each heading step is 1.25 times the previous one. */
@@ -47,9 +41,9 @@
 body {
   margin: 0;
   color: var(--ink);
-  font-family: VT323, monospace;
-  font-size: 19px;
-  line-height: 1.45;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: .8rem;
+  line-height: 1.65;
   background: var(--cream);
 }
 button,
@@ -57,6 +51,11 @@ a,
 input,
 select {
   touch-action: manipulation;
+}
+input,
+select,
+textarea {
+  font: inherit;
 }
 button {
   font: inherit;
@@ -94,17 +93,8 @@ h4,
 h5,
 h6,
 .brand,
-.system-panel,
 .window-title,
-.dock,
-.app-icon,
-.window-sidebar,
-.button,
-.eyebrow,
-.contact-links,
-.email-link,
-.category-links,
-.tags {
+.document-title {
   font-family: "Born2bSporty FS", monospace;
   font-weight: 400;
 }
@@ -169,7 +159,7 @@ button:disabled,
   font-size: 10px;
 }
 .brand {
-  font-size: 13px;
+  font-size: 18px;
   margin: 0;
   white-space: nowrap;
 }
@@ -310,7 +300,7 @@ button:disabled,
   padding: 0;
   border: 1px solid var(--ink);
   background: var(--white);
-  font-family: monospace;
+  font-family: Verdana, Geneva, sans-serif;
   font-size: 13px;
 }
 .window-controls {
@@ -321,8 +311,125 @@ button:disabled,
   flex: 1;
   min-height: 0;
   overflow: auto;
+  scrollbar-gutter: stable;
+}
+/* Native retro scrollbars: Firefox uses these standard color/width tokens. */
+.window-content,
+.window-content pre {
   scrollbar-color: var(--putty) var(--white);
-  scrollbar-width: thin;
+  scrollbar-width: auto;
+}
+/* Chromium/Safari support the square borders and arrow buttons from the design.
+   Reset scrollbar-color here so it does not override the pseudo-elements. */
+@supports selector(::-webkit-scrollbar) {
+  .window-content,
+  .window-content pre {
+    scrollbar-color: auto;
+  }
+  :is(.window-content, .window-content pre)::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+    background: var(--white);
+  }
+  :is(.window-content, .window-content pre)::-webkit-scrollbar-track {
+    background: var(--eggshell);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+  }
+  :is(.window-content, .window-content pre)::-webkit-scrollbar-thumb {
+    min-height: 28px;
+    min-width: 28px;
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    background: var(--putty);
+    box-shadow:
+      inset 1px 1px var(--white),
+      inset -1px -1px var(--ink-soft);
+  }
+  :is(.window-content, .window-content pre)::-webkit-scrollbar-thumb:hover {
+    background: var(--line);
+  }
+  :is(.window-content, .window-content pre)::-webkit-scrollbar-thumb:active {
+    background: var(--ink-soft);
+    box-shadow: inset 1px 1px var(--ink);
+  }
+  :is(.window-content, .window-content pre)::-webkit-scrollbar-button {
+    display: none;
+  }
+  :is(
+      .window-content,
+      .window-content pre
+    )::-webkit-scrollbar-button:single-button {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--ink);
+    background-color: var(--white);
+    background-repeat: no-repeat;
+    background-size:
+      4px 4px,
+      4px 4px;
+  }
+  :is(
+      .window-content,
+      .window-content pre
+    )::-webkit-scrollbar-button:vertical:decrement {
+    background-image:
+      linear-gradient(135deg, transparent 50%, var(--ink) 50%),
+      linear-gradient(45deg, var(--ink) 50%, transparent 50%);
+    background-position:
+      calc(50% - 2px) 50%,
+      calc(50% + 2px) 50%;
+  }
+  :is(
+      .window-content,
+      .window-content pre
+    )::-webkit-scrollbar-button:vertical:increment {
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--ink) 50%),
+      linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+    background-position:
+      calc(50% - 2px) 50%,
+      calc(50% + 2px) 50%;
+  }
+  :is(
+      .window-content,
+      .window-content pre
+    )::-webkit-scrollbar-button:horizontal:decrement {
+    background-image:
+      linear-gradient(135deg, transparent 50%, var(--ink) 50%),
+      linear-gradient(45deg, transparent 50%, var(--ink) 50%);
+    background-position:
+      50% calc(50% - 2px),
+      50% calc(50% + 2px);
+  }
+  :is(
+      .window-content,
+      .window-content pre
+    )::-webkit-scrollbar-button:horizontal:increment {
+    background-image:
+      linear-gradient(45deg, var(--ink) 50%, transparent 50%),
+      linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+    background-position:
+      50% calc(50% - 2px),
+      50% calc(50% + 2px);
+  }
+  :is(
+      .window-content,
+      .window-content pre
+    )::-webkit-scrollbar-button:single-button:hover {
+    background-color: var(--cream);
+  }
+  :is(.window-content, .window-content pre)::-webkit-scrollbar-corner {
+    background: var(--eggshell);
+    border: 1px solid var(--ink);
+  }
+}
+@media (forced-colors: active) {
+  .window-content,
+  .window-content pre {
+    scrollbar-color: auto;
+  }
 }
 .resize-handle {
   position: absolute;
@@ -404,7 +511,6 @@ button:disabled,
   text-align: center;
 }
 .contact-content > p {
-  font-family: "Born2bSporty FS", monospace;
   font-size: 10px;
   margin: 0 0 18px;
 }
@@ -527,9 +633,7 @@ button:disabled,
   border: 2px solid var(--ink);
   box-shadow: 4px 4px var(--ink);
   transform: rotate(-8deg);
-  font:
-    11px "Born2bSporty FS",
-    monospace;
+  font-size: 11px;
   padding: 8px 14px;
   margin: 0 0 18px;
 }
@@ -552,9 +656,73 @@ button:disabled,
   color: var(--link);
 }
 .dev-article-body {
-  white-space: pre-wrap;
   overflow-wrap: anywhere;
   margin: 26px 0;
+}
+.dev-article-body > :first-child {
+  margin-top: 0;
+}
+.dev-article-body > :last-child {
+  margin-bottom: 0;
+}
+.dev-article-body :is(ul, ol) {
+  padding-inline-start: 1.5em;
+  margin-block: 1em;
+}
+.dev-article-body li + li {
+  margin-top: 0.4em;
+}
+.dev-article-body li > p {
+  margin-bottom: 0.5em;
+}
+.dev-article-body blockquote {
+  margin: 1.5em 0;
+  padding: 12px 18px;
+  border-inline-start: 4px solid var(--teal);
+  background: var(--eggshell);
+}
+.dev-article-body pre {
+  max-width: 100%;
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid var(--ink);
+  background: var(--eggshell);
+  white-space: pre;
+  overflow-wrap: normal;
+  tab-size: 2;
+}
+code,
+pre,
+kbd,
+samp {
+  font-family: Verdana, Geneva, sans-serif;
+}
+.dev-article-body code {
+  font-size: 0.9375em;
+}
+.dev-article-body :not(pre) > code {
+  padding: 0.1em 0.3em;
+  background: var(--eggshell);
+  border: 1px solid var(--line);
+}
+.dev-article-body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin-block: 1em;
+}
+.dev-article-body :is(th, td) {
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  text-align: start;
+}
+.dev-article-body th {
+  background: var(--eggshell);
+}
+.dev-article-body .contains-task-list {
+  list-style: none;
+  padding-inline-start: 0;
 }
 .dev-article-actions {
   border: 2px solid var(--ink);
@@ -619,9 +787,7 @@ button:disabled,
   min-width: 0;
 }
 .document-title {
-  font:
-    10px "Born2bSporty FS",
-    monospace;
+  font-size: 10px;
   overflow-wrap: anywhere;
   border-bottom: 1px solid var(--ink);
   margin: -10px -10px 20px;
@@ -699,9 +865,6 @@ button:disabled,
   }
 }
 @media (max-width: 700px) {
-  body {
-    font-size: 19px;
-  }
   .system-panel {
     height: 30px;
     gap: 5px;
