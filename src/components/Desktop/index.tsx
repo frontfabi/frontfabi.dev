@@ -9,7 +9,7 @@ import { trackEvent } from "@/lib/analytics";
 import SnakeGame from "@/components/SnakeGame";
 import Mural, { MuralLogin } from "@/components/Mural";
 import Window from "./Window";
-import { initialMuralWindows } from "./mural-state";
+import { initialMuralWindows, nextWindowOrder } from "./mural-state";
 
 export function PixelIcon({
   name,
@@ -71,11 +71,15 @@ export default function Desktop({
   useEffect(() => {
     if (!muralRequested) return;
     setOpen((current) => current.includes("mural") ? current : [...current, "mural"]);
+    setOrders((current) => ({
+      ...current,
+      mural: nextWindowOrder(current),
+    }));
   }, [muralRequested]);
   const focus = (id: string) =>
     setOrders((prev) => ({
       ...prev,
-      [id]: Math.max(0, ...Object.values(prev)) + 1,
+      [id]: nextWindowOrder(prev),
     }));
   const launch = (id: Utility) => {
     if (id === "contact") trackEvent("open_contact");

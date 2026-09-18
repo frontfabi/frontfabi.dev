@@ -6,7 +6,10 @@ import {
   profileTitle,
   staticSitePaths,
 } from "../src/lib/seo.ts";
-import { initialMuralWindows } from "../src/components/Desktop/mural-state.ts";
+import {
+  initialMuralWindows,
+  nextWindowOrder,
+} from "../src/components/Desktop/mural-state.ts";
 
 test("profile metadata uses the published name, role, and a concise biography", () => {
   assert.equal(
@@ -39,4 +42,8 @@ test("mural links retain the post path through login", () => {
 
 test("a detail URL requesting the mural keeps its window open after navigation", () => {
   assert.deepEqual(initialMuralWindows(true), ["contact", "mural"]);
+});
+
+test("a mural requested from a detail is raised above the existing windows", () => {
+  assert.equal(nextWindowOrder({ main: 2, contact: 1, detail: 3 }), 4);
 });
