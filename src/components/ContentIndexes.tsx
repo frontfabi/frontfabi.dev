@@ -7,6 +7,7 @@ import {
   dateLabel,
 } from "@/lib/content";
 import { devArticlePath, getDevArticles, type DevArticle } from "@/lib/devto";
+import { visibleWorkGroups } from "@/lib/work-groups";
 import type { SiteSettings } from "@/lib/site-settings";
 import type { SiteDocument } from "@/lib/content-types";
 export async function WorkIndex({ locale }: { locale: Locale }) {
@@ -16,63 +17,65 @@ export async function WorkIndex({ locale }: { locale: Locale }) {
     documents("experience", locale),
     documents("community", locale),
   ]);
+  const groups = visibleWorkGroups<SiteDocument>(experiences, community, {
+    professional: t.professional,
+    community: t.community,
+  });
   return (
     <>
       <h2>{t.work}</h2>
-      <nav className="category-links" aria-label={t.folders}>
-        <a href="#professional">{t.professional}</a>
-        <a href="#community">{t.community}</a>
-      </nav>
-      {[
-        { id: "professional", title: t.professional, items: experiences },
-        { id: "community", title: t.community, items: community },
-      ].map((group) => (
+      {groups.length > 1 && (
+        <nav className="category-links" aria-label={t.folders}>
+          {groups.map((group) => (
+            <a href={`#${group.id}`} key={group.id}>
+              {group.title}
+            </a>
+          ))}
+        </nav>
+      )}
+      {groups.map((group) => (
         <section id={group.id} key={group.id}>
           <h2>{group.title}</h2>
-          {group.items.length ? (
-            <ul className="file-list">
-              {group.items
-                .sort((a, b) => {
-                  const date = (d: SiteDocument) =>
-                    d.type === "experience"
-                      ? d.data.startDate || ""
-                      : d.type === "community"
-                        ? d.data.date || ""
-                        : "";
-                  return date(b).localeCompare(date(a));
-                })
-                .map((item) => (
-                  <li key={item.id}>
-                    <article aria-labelledby={`work-${item.id}`}>
-                      <Link
-                        href={documentPath(item)!}
-                        aria-labelledby={`work-${item.id}`}
-                      >
-                        <h3 id={`work-${item.id}`}>{documentTitle(item)}</h3>
-                        {item.type === "experience" && (
-                          <>
-                            <span>{item.data.jobTitle}</span>
-                            <span className="meta">
-                              {dateLabel(item.data.startDate, locale)} —{" "}
-                              {dateLabel(item.data.endDate, locale) ||
-                                t.present}
-                            </span>
-                          </>
-                        )}
-                        {item.type === "community" && (
+          <ul className="file-list">
+            {group.items
+              .sort((a, b) => {
+                const date = (d: SiteDocument) =>
+                  d.type === "experience"
+                    ? d.data.startDate || ""
+                    : d.type === "community"
+                      ? d.data.date || ""
+                      : "";
+                return date(b).localeCompare(date(a));
+              })
+              .map((item) => (
+                <li key={item.id}>
+                  <article aria-labelledby={`work-${item.id}`}>
+                    <Link
+                      href={documentPath(item)!}
+                      aria-labelledby={`work-${item.id}`}
+                    >
+                      <h3 id={`work-${item.id}`}>{documentTitle(item)}</h3>
+                      {item.type === "experience" && (
+                        <>
+                          <span>{item.data.jobTitle}</span>
                           <span className="meta">
-                            {item.data.contribution} ·{" "}
-                            {dateLabel(item.data.date, locale)}
+                            {dateLabel(item.data.startDate, locale)} —{" "}
+                            {dateLabel(item.data.endDate, locale) ||
+                              t.present}
                           </span>
-                        )}
-                      </Link>
-                    </article>
-                  </li>
-                ))}
-            </ul>
-          ) : (
-            <p className="empty-state">{t.empty}</p>
-          )}
+                        </>
+                      )}
+                      {item.type === "community" && (
+                        <span className="meta">
+                          {item.data.contribution} ·{" "}
+                          {dateLabel(item.data.date, locale)}
+                        </span>
+                      )}
+                    </Link>
+                  </article>
+                </li>
+              ))}
+          </ul>
         </section>
       ))}
     </>
