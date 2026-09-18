@@ -4,7 +4,12 @@
   font-weight: 400;
   font-display: swap;
 }
-
+@font-face {
+  font-family: "Pixel Sport";
+  src: url("/fonts/PixelSport-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
 :root {
   /* Major Third: each heading step is 1.25 times the previous one. */
   --heading-ratio: 1.25;
@@ -106,6 +111,13 @@ h5,
 h6 {
   line-height: 1.2;
   overflow-wrap: anywhere;
+}
+a,
+button,
+input,
+select,
+textarea {
+  font-family: "Pixel Sport", monospace;
 }
 h1 {
   font-size: var(--heading-h1);
@@ -300,7 +312,7 @@ button:disabled,
   padding: 0;
   border: 1px solid var(--ink);
   background: var(--white);
-  font-family: Verdana, Geneva, sans-serif;
+  font-family: inherit;
   font-size: 13px;
 }
 .window-controls {
