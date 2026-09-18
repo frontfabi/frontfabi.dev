@@ -1260,3 +1260,252 @@ p {
     padding: 18px 16px;
   }
 }
+
+.not-found-screen {
+  align-items: center;
+  background: var(--pink);
+  display: flex;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 32px;
+}
+.not-found-window {
+  background: var(--white);
+  border: 4px solid var(--ink);
+  box-shadow: 10px 10px 0 var(--ink);
+  max-width: 960px;
+  overflow: hidden;
+  width: 100%;
+}
+.not-found-titlebar {
+  align-items: center;
+  background: var(--cream);
+  border-bottom: 4px solid var(--ink);
+  display: flex;
+  font-family: "Pixel Sport", monospace;
+  font-size: 14px;
+  justify-content: space-between;
+  letter-spacing: .04em;
+  min-height: 42px;
+  padding: 8px 12px;
+}
+.not-found-titlebar span:last-child {
+  align-items: center;
+  background: var(--white);
+  border: 3px solid var(--ink);
+  display: inline-flex;
+  font-family: Verdana, Geneva, sans-serif;
+  font-weight: 700;
+  height: 24px;
+  justify-content: center;
+  line-height: 1;
+  width: 24px;
+}
+.not-found-marquee {
+  background: var(--ink);
+  border-bottom: 4px solid var(--ink);
+  color: var(--pink);
+  font-family: "Pixel Sport", monospace;
+  font-size: 16px;
+  overflow: hidden;
+  padding: 8px 0;
+  white-space: nowrap;
+  width: 100%;
+}
+.not-found-marquee-track {
+  animation: not-found-marquee 15s linear infinite;
+  display: flex;
+  width: max-content;
+}
+.not-found-marquee-copy {
+  flex: none;
+  padding: 0 20px;
+}
+.not-found-content {
+  padding: clamp(34px, 7vw, 74px);
+}
+.not-found-eyebrow {
+  color: var(--ink-soft);
+  font-family: "Pixel Sport", monospace;
+  font-size: 14px;
+  letter-spacing: .08em;
+  margin-bottom: 12px;
+}
+.not-found-glitch {
+  color: var(--ink);
+  font-size: clamp(40px, 8vw, 88px);
+  letter-spacing: -.04em;
+  line-height: .9;
+  margin: 0 0 28px;
+  position: relative;
+  width: fit-content;
+}
+.not-found-attention {
+  animation: not-found-attention 6s steps(2, end) infinite;
+}
+.not-found-glitch::before,
+.not-found-glitch::after {
+  content: attr(data-text);
+  inset: 0;
+  position: absolute;
+}
+.not-found-glitch::before {
+  animation: not-found-glitch-pink 2.8s steps(2, end) infinite;
+  color: var(--pink);
+  clip-path: inset(8% 0 58% 0);
+  text-shadow: -3px 0 var(--pink);
+}
+.not-found-glitch::after {
+  animation: not-found-glitch-ink 3.2s steps(2, end) infinite reverse;
+  color: var(--teal);
+  clip-path: inset(62% 0 12% 0);
+  text-shadow: 3px 0 var(--teal);
+}
+.not-found-description {
+  font-size: 16px;
+  line-height: 1.65;
+  max-width: 610px;
+}
+.not-found-panic {
+  background: var(--ink);
+  border: 4px solid var(--ink);
+  color: var(--pink);
+  display: grid;
+  font-family: "Pixel Sport", monospace;
+  gap: 8px;
+  margin: 32px 0;
+  max-width: 610px;
+  padding: 18px;
+}
+.not-found-panic p {
+  font-family: "Born2bSporty FS", monospace;
+  font-size: 22px;
+  letter-spacing: .05em;
+  margin: 0;
+}
+.not-found-panic strong {
+  color: var(--white);
+  font-size: 16px;
+}
+.not-found-panic span {
+  font-size: 14px;
+}
+.not-found-action {
+  background: var(--pink);
+  border: 4px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  color: var(--ink);
+  display: inline-flex;
+  font-size: 16px;
+  padding: 13px 18px;
+  text-decoration: none;
+}
+.not-found-action:hover {
+  background: var(--ink);
+  color: var(--pink);
+  text-decoration: none;
+}
+.not-found-action:active {
+  box-shadow: 1px 1px 0 var(--ink);
+  transform: translate(4px, 4px);
+}
+.not-found-status {
+  background: var(--cream);
+  border-top: 4px solid var(--ink);
+  color: var(--ink-soft);
+  display: flex;
+  font-family: "Pixel Sport", monospace;
+  font-size: 14px;
+  gap: 32px;
+  overflow: hidden;
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+.not-found-status span {
+  flex: none;
+}
+@keyframes not-found-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes not-found-glitch-pink {
+  0%, 84%, 100% { transform: translate(0); }
+  85% { transform: translate(-4px, 1px); }
+  88% { transform: translate(3px, -2px); }
+  91% { transform: translate(-1px, 2px); }
+}
+@keyframes not-found-glitch-ink {
+  0%, 72%, 100% { transform: translate(0); }
+  73% { transform: translate(4px, -1px); }
+  77% { transform: translate(-3px, 2px); }
+  80% { transform: translate(2px, 1px); }
+}
+@keyframes not-found-attention {
+  0%, 81%, 100% { transform: translate(0); }
+  82% { transform: translate(-7px, 2px); }
+  84% { transform: translate(7px, -2px); }
+  86% { transform: translate(-5px, -2px); }
+  88% { transform: translate(5px, 2px); }
+  90% { transform: translate(-2px, 1px); }
+  92% { transform: translate(0); }
+}
+@media (max-width: 700px) {
+  .not-found-screen {
+    align-items: flex-start;
+    padding: 16px;
+  }
+  .not-found-window {
+    box-shadow: 6px 6px 0 var(--ink);
+    margin-top: 24px;
+  }
+  .not-found-content {
+    padding: 36px 20px 42px;
+  }
+  .not-found-glitch {
+    font-size: clamp(38px, 14vw, 58px);
+  }
+  .not-found-panic {
+    margin: 28px 0;
+  }
+  .not-found-titlebar,
+  .not-found-status {
+    font-size: 12px;
+  }
+  .not-found-status {
+    gap: 0;
+  }
+  .not-found-status span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .not-found-status span[aria-hidden="true"] {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .not-found-marquee-track,
+  .not-found-attention,
+  .not-found-glitch::before,
+  .not-found-glitch::after {
+    animation: none;
+    transform: none;
+  }
+  .not-found-glitch::before,
+  .not-found-glitch::after {
+    display: none;
+  }
+  .not-found-marquee-track {
+    display: block;
+    white-space: normal;
+    width: auto;
+  }
+  .not-found-marquee-copy {
+    display: none;
+    padding: 0 12px;
+  }
+  .not-found-marquee-copy:first-child {
+    display: block;
+  }
+}
