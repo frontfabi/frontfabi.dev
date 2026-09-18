@@ -9,5 +9,17 @@ test("lays out snake controls in a WASD-style cross", async () => {
   );
 
   assert.match(css, /\.snake-controls button:first-child\s*\{\s*grid-column:\s*2;\s*\}/);
+  assert.match(
+    css,
+    /\.snake-controls button:nth-child\(2\)\s*\{\s*grid-column:\s*1;\s*grid-row:\s*2;\s*\}/,
+  );
+  assert.match(
+    css,
+    /\.snake-controls button:nth-child\(3\)\s*\{\s*grid-column:\s*2;\s*grid-row:\s*2;\s*\}/,
+  );
+  assert.match(
+    css,
+    /\.snake-controls button:nth-child\(4\)\s*\{\s*grid-column:\s*3;\s*grid-row:\s*2;\s*\}/,
+  );
   assert.match(css, /\.snake-controls \.snake-reset\s*\{\s*grid-column:\s*1\s*\/\s*-1;\s*\}/);
 });
