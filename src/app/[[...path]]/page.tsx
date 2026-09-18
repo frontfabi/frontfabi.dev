@@ -257,9 +257,18 @@ export default async function SitePage({ params }: Props) {
       <div className="welcome-window">
         <div className="window-title">sobre — frontfabi.dev</div>
         <div className="welcome-body">
-          <span className="sticker">EST. 2007</span>
-          <h1>Fabiana Rodrigues</h1>
-          <p className="eyebrow">Front-end developer · frontfabi.dev</p>
+          <div className="welcome-heading">
+            <div>
+              <span className="sticker">EST. 2007</span>
+              <h1>Fabiana Rodrigues</h1>
+              <p className="eyebrow">Front-end developer · frontfabi.dev</p>
+            </div>
+            <img
+              className="welcome-avatar"
+              src="https://images.prismic.io/frontfabi/Z5jwp5bqstJ998QQ_fabi_avatar.gif?auto=format%2Ccompress&rect=41%2C0%2C611%2C611&w=3840&fit=max"
+              alt="Avatar animado de Fabiana Rodrigues"
+            />
+          </div>
           {doc?.type === "page" && doc.data.home_intro?.length ? (
             <PrismicRichText field={doc.data.home_intro} />
           ) : (

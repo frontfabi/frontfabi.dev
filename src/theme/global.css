@@ -800,6 +800,24 @@ button:disabled,
 .welcome-body {
   position: relative;
 }
+.welcome-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+.welcome-heading > div {
+  min-width: 0;
+  flex: 1;
+}
+.welcome-avatar {
+  width: 112px;
+  height: 112px;
+  flex: 0 0 112px;
+  object-fit: cover;
+  border: 3px solid var(--ink);
+  background: var(--white);
+}
 .welcome-body h1 {
   border-bottom: 5px solid var(--ink);
   padding-bottom: 8px;
@@ -1236,6 +1254,11 @@ p {
   }
   .home-desktop .welcome-body {
     padding: 4px;
+  }
+  .welcome-avatar {
+    width: 82px;
+    height: 82px;
+    flex-basis: 82px;
   }
   .home-desktop .contact-content {
     background: var(--white);
