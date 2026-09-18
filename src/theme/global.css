@@ -97,7 +97,7 @@ h3,
 h4,
 h5,
 h6,
-.brand,
+.brand a,
 .window-title,
 .document-title {
   font-family: "Born2bSporty FS", monospace;
@@ -113,7 +113,8 @@ h6 {
   overflow-wrap: anywhere;
 }
 a,
-button {
+button,
+footer {
   font-family: "Pixel Sport", monospace;
   font-size: 16px;
 }
@@ -240,7 +241,7 @@ button:disabled,
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  font-size: 9px;
+  font-size: 14px;
   line-height: 1.5;
   text-align: center;
   color: var(--ink);
@@ -716,7 +717,9 @@ button:disabled,
 code,
 pre,
 kbd,
-samp {
+samp,
+article p,
+p {
   font-family: Verdana, Geneva, sans-serif;
 }
 .dev-article-body code {
@@ -930,7 +933,6 @@ samp {
     display: none;
   }
   .app-icon {
-    font-size: 9px;
     gap: 10px;
   }
   .icon-tile {
