@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  clearMuralQuery,
   metadataDescription,
   muralPath,
   profileTitle,
@@ -33,5 +34,12 @@ test("mural links retain the post path through login", () => {
   assert.equal(
     muralPath("/articles/dev-42-seo-tecnico"),
     "/articles/dev-42-seo-tecnico?mural=1",
+  );
+});
+
+test("opening the mural clears only its query flag after the window opens", () => {
+  assert.equal(
+    clearMuralQuery("/trabalho/profissional/mercado-livre", "mural=1&source=post"),
+    "/trabalho/profissional/mercado-livre?source=post",
   );
 });

@@ -954,9 +954,8 @@ p {
 }
 .mural-post-link {
   display: inline-block;
-  margin: 18px 0;
   border: 2px solid var(--ink);
-  background: var(--putty);
+  background: var(--pink);
   box-shadow: 2px 2px var(--ink);
   padding: 9px 12px;
   color: var(--ink);
@@ -964,6 +963,25 @@ p {
 }
 .mural-post-link:hover,
 .mural-post-link:focus-visible {
+  background: var(--amber);
+}
+.detail-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+}
+.detail-actions > a {
+  border: 2px solid var(--ink);
+  background: var(--pink);
+  box-shadow: 2px 2px var(--ink);
+  padding: 9px 12px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.detail-actions > a:hover,
+.detail-actions > a:focus-visible {
   background: var(--amber);
 }
 .empty-state {

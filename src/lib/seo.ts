@@ -24,3 +24,10 @@ export function muralPath(pathname: string) {
   params.set("mural", "1");
   return `${path}?${params.toString()}`;
 }
+
+export function clearMuralQuery(pathname: string, query: string) {
+  const params = new URLSearchParams(query);
+  params.delete("mural");
+  const remaining = params.toString();
+  return remaining ? `${pathname}?${remaining}` : pathname;
+}

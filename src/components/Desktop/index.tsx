@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { copy, localizedPath, type Locale } from "@/lib/site";
 import { availableLocaleMenuItems } from "@/lib/locale-menu";
+import { clearMuralQuery } from "@/lib/seo";
 import { trackEvent } from "@/lib/analytics";
 import SnakeGame from "@/components/SnakeGame";
 import Mural, { MuralLogin } from "@/components/Mural";
@@ -50,6 +51,7 @@ export default function Desktop({
   languages: Partial<Record<Locale, string>>;
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = copy[locale];
   const [detailOpen, setDetailOpen] = useState(Boolean(detail));
   const [mainOpen, setMainOpen] = useState(true);
@@ -64,10 +66,14 @@ export default function Desktop({
     detail: 3,
   });
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("mural") !== "1") return;
+    if (searchParams.get("mural") !== "1") return;
     setOpen((current) => current.includes("mural") ? current : [...current, "mural"]);
-    window.history.replaceState({}, "", window.location.pathname);
-  }, []);
+    window.history.replaceState(
+      {},
+      "",
+      `${clearMuralQuery(window.location.pathname, searchParams.toString())}${window.location.hash}`,
+    );
+  }, [searchParams]);
   const focus = (id: string) =>
     setOrders((prev) => ({
       ...prev,

@@ -223,10 +223,12 @@ export default async function SitePage({ params }: Props) {
       <article className="document-sheet">
         <h1>{documentTitle(doc)}</h1>
         <ProfessionalRow {...doc.data} locale={locale} />
-        <Link className="mural-post-link" href={muralPath(documentPath(doc)!)}>
-          ☁ {t.commentOnMural}
-        </Link>
-        <Link href={href("/trabalho")}>← {t.work}</Link>
+        <div className="detail-actions">
+          <Link className="mural-post-link" href={muralPath(documentPath(doc)!)}>
+            ☁ {t.commentOnMural}
+          </Link>
+          <Link href={href("/trabalho")}>← {t.work}</Link>
+        </div>
       </article>
     );
   else if (doc?.type === "community")
@@ -263,13 +265,15 @@ export default async function SitePage({ params }: Props) {
             {settings.blog.commentsLabel} ↗
           </a>
         </p>
-        <Link
-          className="mural-post-link"
-          href={muralPath(localizedPath(devArticlePath(devArticle), locale))}
-        >
-          ☁ {t.commentOnMural}
-        </Link>
-        <Link href={href("/blog")}>← {t.blog}</Link>
+        <div className="detail-actions">
+          <Link
+            className="mural-post-link"
+            href={muralPath(localizedPath(devArticlePath(devArticle), locale))}
+          >
+            ☁ {t.commentOnMural}
+          </Link>
+          <Link href={href("/blog")}>← {t.blog}</Link>
+        </div>
       </article>
     );
   else if (doc?.type === "post")
@@ -288,10 +292,12 @@ export default async function SitePage({ params }: Props) {
             ),
           }}
         />
-        <Link className="mural-post-link" href={muralPath(documentPath(doc)!)}>
-          ☁ {t.commentOnMural}
-        </Link>
-        <Link href={href("/blog")}>← {t.blog}</Link>
+        <div className="detail-actions">
+          <Link className="mural-post-link" href={muralPath(documentPath(doc)!)}>
+            ☁ {t.commentOnMural}
+          </Link>
+          <Link href={href("/blog")}>← {t.blog}</Link>
+        </div>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
