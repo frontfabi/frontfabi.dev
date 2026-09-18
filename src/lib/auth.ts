@@ -2,6 +2,9 @@ import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 
 export const { handlers, auth } = NextAuth({
+  // The app runs behind Vercel's proxy, so the public host must be trusted
+  // when Auth.js validates the OAuth callback URL.
+  trustHost: true,
   providers: [GitHub],
   callbacks: {
     jwt({ token, profile }) {
