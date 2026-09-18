@@ -767,6 +767,33 @@ button:disabled,
 .dock .mobile-dock-game {
   display: none;
 }
+.dock-mural { position: relative; }
+.dock-mural-icon { font-size: 30px; line-height: 28px; }
+.mural-badge { position: absolute; top: -8px; right: -8px; width: 15px; height: 15px; border: 2px solid var(--ink); border-radius: 50%; background: var(--pink); }
+.mural { left: calc(50vw - 270px); top: 12vh; width: 540px; height: 500px; }
+.mural-login { left: calc(50vw - 180px); top: 25vh; width: 360px; height: 280px; }
+.mural-widget { display: grid; grid-template-columns: minmax(0, 1fr) 92px; grid-template-rows: minmax(0, 1fr) 142px; height: 100%; background: var(--eggshell); }
+.mural-history { grid-column: 1; min-height: 0; overflow: auto; padding: 18px; background: var(--white); border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
+.mural-empty { margin: 0; color: var(--ink-soft); font-size: 13px; }
+.mural-message { display: flex; gap: 8px; margin: 0 0 12px; padding: 8px; border: 1px solid var(--line); background: var(--eggshell); font: 12px Verdana, sans-serif; }
+.mural-message img { width: 30px; height: 30px; border: 1px solid var(--ink); object-fit: cover; }
+.mural-message p { margin: 0; overflow-wrap: anywhere; }
+.mural-avatars { grid-column: 2; grid-row: 1 / 3; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 12px 8px; background: var(--cream); }
+.mural-avatars > div { display: grid; gap: 5px; justify-items: center; font-size: 9px; text-align: center; }
+.mural-avatars img, .mural-visitor-avatar > span:first-child { width: 62px; height: 62px; border: 2px solid var(--ink); object-fit: cover; background: var(--white); }
+.mural-visitor-avatar > span:first-child { display: grid; place-items: center; color: var(--ink-soft); font-size: 25px; }
+.mural-composer { grid-column: 1; display: grid; grid-template-columns: 1fr auto; gap: 7px; padding: 10px; background: var(--eggshell); }
+.mural-composer label { grid-column: 1 / -1; font-size: 10px; }
+.mural-composer textarea { min-height: 64px; resize: none; border: 2px solid var(--ink); background: var(--white); color: var(--ink); padding: 7px; font: 12px Verdana, sans-serif; }
+.mural-composer textarea:disabled { background: var(--putty); color: var(--ink-soft); cursor: not-allowed; }
+.mural-composer button, .mural-login button { align-self: end; border: 2px solid var(--ink); background: var(--amber); box-shadow: 2px 2px var(--ink); padding: 7px 10px; color: var(--ink); font: 12px "Pixel Sport", monospace; }
+.mural-composer button:disabled { opacity: .65; cursor: wait; }
+.mural-error { grid-column: 1 / -1; margin: 0; color: #9b153f; font-size: 11px; }
+.mural-login { display: grid; align-content: center; justify-items: center; gap: 12px; padding: 22px; text-align: center; background: var(--cream); }
+.mural-login-mark { margin: 0; color: var(--teal); font-size: 30px; letter-spacing: 4px; }
+.mural-login h2, .mural-login p { margin: 0; }
+.mural-login small { font-size: 10px; color: var(--ink-soft); }
+@media (max-width: 700px) { .mural { left: 8px; top: 60px; width: calc(100vw - 16px); height: min(520px, calc(100dvh - 150px)); } .mural-login { left: 8px; top: 100px; width: calc(100vw - 16px); } }
 .restore-task span {
   font-size: 7px;
 }

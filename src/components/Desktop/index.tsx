@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { copy, localizedPath, type Locale } from "@/lib/site";
 import { trackEvent } from "@/lib/analytics";
 import SnakeGame from "@/components/SnakeGame";
+import Mural, { MuralLogin } from "@/components/Mural";
 import Window from "./Window";
 
 export function PixelIcon({
@@ -25,7 +26,7 @@ export function PixelIcon({
     />
   );
 }
-type Utility = "contact" | "settings" | "help" | "computer" | "game";
+type Utility = "contact" | "settings" | "help" | "computer" | "game" | "mural" | "mural-login";
 const cv =
   "https://frontfabi.cdn.prismic.io/frontfabi/Z5WBKZbqstJ992ad_CVFabiRodrigues-EN.pdf";
 export default function Desktop({
@@ -60,6 +61,11 @@ export default function Desktop({
     contact: 1,
     detail: 3,
   });
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("mural") !== "1") return;
+    setOpen((current) => current.includes("mural") ? current : [...current, "mural"]);
+    window.history.replaceState({}, "", window.location.pathname);
+  }, []);
   const focus = (id: string) =>
     setOrders((prev) => ({
       ...prev,
@@ -72,6 +78,7 @@ export default function Desktop({
     focus(id);
     setMenu(null);
   };
+  const openMuralLogin = () => launch("mural-login");
   const restoreHome = () => {
     setDetailOpen(false);
     setMainOpen(true);
@@ -306,6 +313,10 @@ export default function Desktop({
                     ? computer
                     : id === "game"
                       ? "game.py"
+                      : id === "mural"
+                        ? "mural.exe"
+                        : id === "mural-login"
+                          ? "login.exe"
                     : "readme.txt"
             }
             locale={locale}
@@ -398,6 +409,10 @@ export default function Desktop({
               </div>
             ) : id === "game" ? (
               <SnakeGame />
+            ) : id === "mural" ? (
+              <Mural onLogin={openMuralLogin} />
+            ) : id === "mural-login" ? (
+              <MuralLogin />
             ) : (
               <div className="utility-content">
                 <h2>frontfabi OS</h2>
@@ -477,6 +492,11 @@ export default function Desktop({
         <button className="dock-settings" onClick={() => launch("settings")}>
           <PixelIcon name="settings" />
           <span>Config</span>
+        </button>
+        <button className="dock-item dock-mural" onClick={() => launch("mural")} aria-label="Abrir mural">
+          <span className="dock-mural-icon" aria-hidden="true">☁</span>
+          <span>Mural</span>
+          <span className="mural-badge" aria-label="Novidade" />
         </button>
         {minimized && (
           <button

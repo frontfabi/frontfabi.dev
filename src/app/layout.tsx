@@ -5,6 +5,7 @@ import { PrismicPreview } from "@prismicio/next";
 import { repositoryName } from "@/prismicio";
 import { siteUrl } from "@/lib/site";
 import Analytics from "@/components/Analytics";
+import { SessionProvider } from "next-auth/react";
 import "../theme/global.css";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -23,7 +24,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <SessionProvider><StyledComponentsRegistry>{children}</StyledComponentsRegistry></SessionProvider>
         <PrismicPreview repositoryName={repositoryName} />
         <Analytics />
       </body>
