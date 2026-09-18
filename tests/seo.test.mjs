@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  clearMuralQuery,
   metadataDescription,
   muralPath,
   profileTitle,
   staticSitePaths,
 } from "../src/lib/seo.ts";
+import { initialMuralWindows } from "../src/components/Desktop/mural-state.ts";
 
 test("profile metadata uses the published name, role, and a concise biography", () => {
   assert.equal(
@@ -37,9 +37,6 @@ test("mural links retain the post path through login", () => {
   );
 });
 
-test("opening the mural clears only its query flag after the window opens", () => {
-  assert.equal(
-    clearMuralQuery("/trabalho/profissional/mercado-livre", "mural=1&source=post"),
-    "/trabalho/profissional/mercado-livre?source=post",
-  );
+test("a detail URL requesting the mural keeps its window open after navigation", () => {
+  assert.deepEqual(initialMuralWindows(true), ["contact", "mural"]);
 });

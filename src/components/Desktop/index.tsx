@@ -5,11 +5,11 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { copy, localizedPath, type Locale } from "@/lib/site";
 import { availableLocaleMenuItems } from "@/lib/locale-menu";
-import { clearMuralQuery } from "@/lib/seo";
 import { trackEvent } from "@/lib/analytics";
 import SnakeGame from "@/components/SnakeGame";
 import Mural, { MuralLogin } from "@/components/Mural";
 import Window from "./Window";
+import { initialMuralWindows } from "./mural-state";
 
 export function PixelIcon({
   name,
@@ -52,12 +52,15 @@ export default function Desktop({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const muralRequested = searchParams.get("mural") === "1";
   const t = copy[locale];
   const [detailOpen, setDetailOpen] = useState(Boolean(detail));
   const [mainOpen, setMainOpen] = useState(true);
   const [minimized, setMinimized] = useState(false);
   const [minimizedUtilities, setMinimizedUtilities] = useState<Utility[]>([]);
-  const [open, setOpen] = useState<Utility[]>(["contact"]);
+  const [open, setOpen] = useState<Utility[]>(() =>
+    initialMuralWindows(muralRequested),
+  );
   const [menu, setMenu] = useState<string | null>(null);
   const [reset, setReset] = useState(0);
   const [orders, setOrders] = useState<Record<string, number>>({
@@ -66,14 +69,9 @@ export default function Desktop({
     detail: 3,
   });
   useEffect(() => {
-    if (searchParams.get("mural") !== "1") return;
+    if (!muralRequested) return;
     setOpen((current) => current.includes("mural") ? current : [...current, "mural"]);
-    window.history.replaceState(
-      {},
-      "",
-      `${clearMuralQuery(window.location.pathname, searchParams.toString())}${window.location.hash}`,
-    );
-  }, [searchParams]);
+  }, [muralRequested]);
   const focus = (id: string) =>
     setOrders((prev) => ({
       ...prev,
