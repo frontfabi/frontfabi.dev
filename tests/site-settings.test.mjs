@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import {
   fallbackSettings,
   isValidNavigation,
@@ -37,5 +38,16 @@ test("keeps fallback navigation when CMS navigation is incomplete", () => {
   assert.deepEqual(
     settings.navigation.map((item) => item.key),
     ["about", "blog", "work", "contact"],
+  );
+});
+
+test("SitePage loads settings before rendering the DEV blog", async () => {
+  const page = await readFile(
+    new URL("../src/app/[[...path]]/page.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    page,
+    /export default async function SitePage[\s\S]*const settings = await siteSettings\(locale\)/,
   );
 });

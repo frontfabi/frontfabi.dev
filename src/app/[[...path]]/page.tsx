@@ -57,7 +57,6 @@ async function resolve(path?: string[]) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { path } = await params;
   const { locale, section, doc } = await resolve(path);
-  const settings = await siteSettings(locale);
   const t = copy[locale];
   const title =
     section === "home"
@@ -114,6 +113,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SitePage({ params }: Props) {
   const { path } = await params;
   const { locale, section, doc } = await resolve(path);
+  const settings = await siteSettings(locale);
   const t = copy[locale];
   const href = (path: string) => localizedPath(path, locale);
   const app =
