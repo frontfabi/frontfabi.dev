@@ -560,6 +560,12 @@ button:disabled,
   width: 420px;
   height: 330px;
 }
+.game {
+  left: calc(50vw - 190px);
+  top: 16vh;
+  width: 380px;
+  height: 480px;
+}
 .utility-content {
   padding: 24px;
 }
@@ -589,6 +595,56 @@ button:disabled,
   flex-direction: column;
   align-items: center;
   gap: 6px;
+}
+.snake-game {
+  padding: 16px;
+  font-family: "Pixel Sport", monospace;
+}
+.snake-game-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.snake-board {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  border: 2px solid var(--ink);
+  background: var(--eggshell);
+  aspect-ratio: 1;
+}
+.snake-cell {
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+}
+.snake-cell.snake {
+  background: var(--teal);
+}
+.snake-cell.food {
+  background: var(--pink);
+}
+.snake-controls {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+}
+.snake-controls button {
+  border: 2px solid var(--ink);
+  background: var(--white);
+  padding: 6px;
+  line-height: 1;
+}
+.snake-controls button:hover {
+  background: var(--amber);
+}
+.snake-controls .snake-reset {
+  grid-column: span 4;
+}
+.snake-game > p {
+  margin: 12px 0 0;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 12px;
 }
 .dock {
   position: fixed;

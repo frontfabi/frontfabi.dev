@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { copy, localizedPath, type Locale } from "@/lib/site";
+import SnakeGame from "@/components/SnakeGame";
 import Window from "./Window";
 
 export function PixelIcon({
@@ -23,7 +24,7 @@ export function PixelIcon({
     />
   );
 }
-type Utility = "contact" | "settings" | "help" | "computer";
+type Utility = "contact" | "settings" | "help" | "computer" | "game";
 const cv =
   "https://frontfabi.cdn.prismic.io/frontfabi/Z5WBKZbqstJ992ad_CVFabiRodrigues-EN.pdf";
 export default function Desktop({
@@ -204,6 +205,12 @@ export default function Desktop({
           </span>
           <span>{computer}</span>
         </button>
+        <button className="app-icon" onClick={() => launch("game")}>
+          <span className="icon-tile">
+            <PixelIcon name="game" />
+          </span>
+          <span>game.py</span>
+        </button>
         {apps.map((item) => (
           <Link
             key={item.key}
@@ -283,6 +290,8 @@ export default function Desktop({
                   ? t.settings
                   : id === "computer"
                     ? computer
+                    : id === "game"
+                      ? "game.py"
                     : "readme.txt"
             }
             locale={locale}
@@ -368,6 +377,8 @@ export default function Desktop({
                   ))}
                 </nav>
               </div>
+            ) : id === "game" ? (
+              <SnakeGame />
             ) : (
               <div className="utility-content">
                 <h2>frontfabi OS</h2>
