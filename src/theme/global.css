@@ -749,7 +749,7 @@ button:disabled,
   min-height: 60px;
   border: 2px solid var(--ink);
   border-radius: 4px;
-  font-size: 8px;
+  font-size: 14px;
   padding: 3px;
 }
 .dock [aria-current="page"],
@@ -786,13 +786,13 @@ button:disabled,
 .mural-composer label { grid-column: 1 / -1; font-size: 10px; }
 .mural-composer textarea { min-height: 64px; resize: none; border: 2px solid var(--ink); background: var(--white); color: var(--ink); padding: 7px; font: 12px Verdana, sans-serif; }
 .mural-composer textarea:disabled { background: var(--putty); color: var(--ink-soft); cursor: not-allowed; }
-.mural-composer button, .mural-login button { align-self: end; border: 2px solid var(--ink); background: var(--amber); box-shadow: 2px 2px var(--ink); padding: 7px 10px; color: var(--ink); font: 12px "Pixel Sport", monospace; }
+.mural-composer button, .mural-login-content button { align-self: end; border: 2px solid var(--ink); background: var(--amber); box-shadow: 2px 2px var(--ink); padding: 7px 10px; color: var(--ink); font: 12px "Pixel Sport", monospace; }
 .mural-composer button:disabled { opacity: .65; cursor: wait; }
 .mural-error { grid-column: 1 / -1; margin: 0; color: #9b153f; font-size: 11px; }
-.mural-login { display: grid; align-content: center; justify-items: center; gap: 12px; padding: 22px; text-align: center; background: var(--cream); }
+.mural-login-content { display: grid; min-height: 100%; box-sizing: border-box; align-content: center; justify-items: center; gap: 12px; padding: 22px; text-align: center; background: var(--cream); }
 .mural-login-mark { margin: 0; color: var(--teal); font-size: 30px; letter-spacing: 4px; }
-.mural-login h2, .mural-login p { margin: 0; }
-.mural-login small { font-size: 10px; color: var(--ink-soft); }
+.mural-login-content h2, .mural-login-content p { margin: 0; }
+.mural-login-content small { font-size: 10px; color: var(--ink-soft); }
 @media (max-width: 700px) { .mural { left: 8px; top: 60px; width: calc(100vw - 16px); height: min(520px, calc(100dvh - 150px)); } .mural-login { left: 8px; top: 100px; width: calc(100vw - 16px); } }
 .restore-task span {
   font-size: 7px;

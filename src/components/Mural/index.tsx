@@ -64,7 +64,7 @@ export default function Mural({ onLogin }: { onLogin: () => void }) {
 
 export function MuralLogin() {
   return (
-    <div className="mural-login">
+    <div className="mural-login-content">
       <p className="mural-login-mark">●◕●</p>
       <h2>oi :)</h2>
       <p>Entre com sua conta para deixar um recado no mural da Fabi.</p>

@@ -53,6 +53,7 @@ export default function Desktop({
   const [detailOpen, setDetailOpen] = useState(Boolean(detail));
   const [mainOpen, setMainOpen] = useState(true);
   const [minimized, setMinimized] = useState(false);
+  const [minimizedUtilities, setMinimizedUtilities] = useState<Utility[]>([]);
   const [open, setOpen] = useState<Utility[]>(["contact"]);
   const [menu, setMenu] = useState<string | null>(null);
   const [reset, setReset] = useState(0);
@@ -75,6 +76,7 @@ export default function Desktop({
     if (id === "contact") trackEvent("open_contact");
     if (id === "game") trackEvent("open_game");
     setOpen((prev) => (prev.includes(id) ? prev : [...prev, id]));
+    setMinimizedUtilities((prev) => prev.filter((item) => item !== id));
     focus(id);
     setMenu(null);
   };
@@ -83,6 +85,7 @@ export default function Desktop({
     setDetailOpen(false);
     setMainOpen(true);
     setMinimized(false);
+    setMinimizedUtilities([]);
     setMenu(null);
     setReset((n) => n + 1);
     setOrders({ main: 2, contact: 1 });
@@ -322,10 +325,17 @@ export default function Desktop({
             locale={locale}
             kind={id}
             order={orders[id]}
+            minimized={minimizedUtilities.includes(id)}
             onFocus={() => focus(id)}
-            onClose={() =>
-              setOpen((prev) => prev.filter((item) => item !== id))
+            onMinimize={() =>
+              setMinimizedUtilities((prev) =>
+                prev.includes(id) ? prev : [...prev, id],
+              )
             }
+            onClose={() => {
+              setOpen((prev) => prev.filter((item) => item !== id));
+              setMinimizedUtilities((prev) => prev.filter((item) => item !== id));
+            }}
           >
             {id === "contact" ? (
               <div className="contact-content">
@@ -510,6 +520,19 @@ export default function Desktop({
             ↑<span>{t.restore}</span>
           </button>
         )}
+        {minimizedUtilities.map((id) => (
+          <button
+            className="restore-task"
+            key={id}
+            onClick={() => {
+              setMinimizedUtilities((prev) => prev.filter((item) => item !== id));
+              focus(id);
+            }}
+            aria-label={`${t.restore}: ${id === "mural-login" ? "login.exe" : "mural.exe"}`}
+          >
+            ↑<span>{id === "mural-login" ? "login.exe" : "mural.exe"}</span>
+          </button>
+        ))}
       </nav>
     </div>
   );
