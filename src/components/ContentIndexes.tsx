@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { asText } from "@prismicio/client";
 import { copy, type Locale } from "@/lib/site";
 import {
   documents,
@@ -7,6 +6,8 @@ import {
   documentTitle,
   dateLabel,
 } from "@/lib/content";
+import { getDevArticles, type DevArticle } from "@/lib/devto";
+import type { SiteSettings } from "@/lib/site-settings";
 import type { SiteDocument } from "@/lib/content-types";
 export async function WorkIndex({ locale }: { locale: Locale }) {
   const t = copy[locale];
@@ -71,39 +72,37 @@ export async function WorkIndex({ locale }: { locale: Locale }) {
     </>
   );
 }
-export async function BlogIndex({ locale }: { locale: Locale }) {
-  const t = copy[locale];
-
-  const posts = (await documents("post", locale))
-    .filter((item) => item.type === "post")
-    .sort((a, b) =>
-      (b.data.published_date || b.first_publication_date).localeCompare(
-        a.data.published_date || a.first_publication_date,
-      ),
-    );
+export async function BlogIndex({ settings }: { settings: SiteSettings }) {
+  let posts: DevArticle[] = [];
+  try {
+    posts = await getDevArticles(settings.blog.devUsername);
+  } catch {
+    posts = [];
+  }
   return (
     <>
-      <h1>{t.blog}</h1>
+      <h1>{settings.blog.title}</h1>
+      {settings.blog.intro && <p>{settings.blog.intro}</p>}
       <p className="meta">
-        {posts.length} {t.posts.toLowerCase()}
+        {posts.length} {settings.copy.posts.toLowerCase()}
       </p>
       {posts.length ? (
         <ul className="file-list posts">
           {posts.map((post) => (
             <li key={post.id}>
-              <Link href={documentPath(post)!}>
-                <strong>{asText(post.data.title)}</strong>
-                <span>{post.data.excerpt}</span>
+              <a href={post.url} target="_blank" rel="noreferrer">
+                <strong>{post.title}</strong>
+                <span>{post.description}</span>
                 <span className="meta">
-                  {dateLabel(post.data.published_date, locale)} ·{" "}
-                  {post.data.category}
+                  {post.tags.join(" · ")} · {post.readingTimeMinutes} min · {post.positiveReactionsCount} {settings.blog.reactionsLabel} · {post.commentsCount} {settings.blog.commentsLabel}
                 </span>
-              </Link>
+                <span>{settings.blog.readOnDevLabel} ↗</span>
+              </a>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="empty-state">{t.empty}</p>
+        <p className="empty-state">{settings.blog.emptyMessage}</p>
       )}
     </>
   );

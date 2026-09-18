@@ -16,6 +16,7 @@ import {
   documentTitle,
   languageLinks,
   dateLabel,
+  siteSettings,
 } from "@/lib/content";
 import { copy, locales, localizedPath, parsePath, siteUrl } from "@/lib/site";
 import type { SiteDocument } from "@/lib/content-types";
@@ -56,6 +57,7 @@ async function resolve(path?: string[]) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { path } = await params;
   const { locale, section, doc } = await resolve(path);
+  const settings = await siteSettings(locale);
   const t = copy[locale];
   const title =
     section === "home"
@@ -197,7 +199,7 @@ export default async function SitePage({ params }: Props) {
       </article>
     );
   else if (section === "trabalho") content = <WorkIndex locale={locale} />;
-  else if (section === "blog") content = <BlogIndex locale={locale} />;
+  else if (section === "blog") content = <BlogIndex settings={settings} />;
   else if (section === "home")
     content = (
       <div className="welcome-window">
@@ -253,7 +255,7 @@ export default async function SitePage({ params }: Props) {
         app === "work" ? (
           <WorkIndex locale={locale} />
         ) : (
-          <BlogIndex locale={locale} />
+          <BlogIndex settings={settings} />
         )
       ) : (
         content
