@@ -75,7 +75,7 @@ export default function SnakeGame() {
             {control.symbol}
           </button>
         ))}
-        <button className="snake-reset" onClick={() => setGame(createGame)}>
+        <button className="snake-reset" onClick={() => setGame(() => createGame())}>
           reiniciar
         </button>
       </div>
