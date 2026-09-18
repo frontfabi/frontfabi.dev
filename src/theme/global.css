@@ -211,18 +211,31 @@ button:disabled,
   background: var(--white);
   padding: 5px;
 }
-.dropdown button {
+.dropdown button,
+.dropdown a {
   display: block;
   text-align: left;
   width: 100%;
   padding: 10px;
+  color: var(--ink);
+  text-decoration: none;
 }
-.dropdown button:hover {
+.dropdown button:hover,
+.dropdown a:hover,
+.dropdown a:focus-visible,
+.dropdown a[aria-current="true"] {
   background: var(--teal);
   color: var(--white);
 }
-.panel-language {
+.panel-language-menu {
   margin-left: auto;
+}
+.panel-language-menu .dropdown {
+  right: 0;
+  left: auto;
+  min-width: 150px;
+}
+.panel-language {
   font-family: inherit;
   font-size: 10px;
 }

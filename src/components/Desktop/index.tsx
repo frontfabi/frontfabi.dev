@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { copy, localizedPath, type Locale } from "@/lib/site";
+import { availableLocaleMenuItems } from "@/lib/locale-menu";
 import { trackEvent } from "@/lib/analytics";
 import SnakeGame from "@/components/SnakeGame";
 import Mural, { MuralLogin } from "@/components/Mural";
@@ -162,6 +163,7 @@ export default function Desktop({
       },
     ],
   };
+  const localeMenuItems = availableLocaleMenuItems(languages);
   return (
     <div
       className={`desktop ${app ? "inside-app" : "home-desktop"} ${detailOpen ? "has-detail" : ""}`}
@@ -208,13 +210,37 @@ export default function Desktop({
             </div>
           ))}
         </nav>
-        <button
-          className="panel-language"
-          onClick={() => launch("settings")}
-          aria-label={t.settings}
+        <div
+          className="menu-container panel-language-menu"
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget))
+              setMenu((current) => (current === "language" ? null : current));
+          }}
         >
-          ◎ {locale.toUpperCase()} ▾
-        </button>
+          <button
+            className="panel-language"
+            aria-expanded={menu === "language"}
+            aria-controls="menu-language"
+            onClick={() => setMenu(menu === "language" ? null : "language")}
+          >
+            ◎ {locale.toUpperCase()} ▾
+          </button>
+          {menu === "language" && (
+            <div id="menu-language" className="dropdown" aria-label={t.language}>
+              {localeMenuItems.map((item) => (
+                <Link
+                  key={item.locale}
+                  href={item.href}
+                  hrefLang={item.locale}
+                  aria-current={locale === item.locale ? "true" : undefined}
+                  onClick={() => setMenu(null)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </header>
       <nav className="desktop-icons" aria-label={t.desktop}>
         <button className="app-icon" onClick={() => launch("computer")}>
@@ -481,20 +507,6 @@ export default function Desktop({
             <span>{item.label}</span>
           </Link>
         ))}
-        <button className="dock-item dock-contact" onClick={() => launch("contact")}>
-          <PixelIcon name="mail" />
-          <span>{contact}</span>
-        </button>
-        <a
-          className="dock-item dock-cv"
-          href={cv}
-          target="_blank"
-          rel="noreferrer"
-          onClick={() => trackCvDownload("dock")}
-        >
-          <PixelIcon name="blog" />
-          <span>CV</span>
-        </a>
         <button className="mobile-dock-game" onClick={() => launch("game")}>
           <PixelIcon name="game" />
           <span>game.py</span>
