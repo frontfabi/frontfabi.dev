@@ -12,7 +12,7 @@ export const { handlers, auth } = NextAuth({
       return token;
     },
     session({ session, token }) {
-      if (token.sub && token.login) {
+      if (token.sub && typeof token.login === "string" && token.login) {
         session.user.githubId = token.sub;
         session.user.login = String(token.login);
       }
