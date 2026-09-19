@@ -54,7 +54,7 @@ export default function SnakeGame() {
     <div className="snake-game">
       <div className="snake-game-header">
         <span>score: {game.score}</span>
-        <span>{game.status === "game-over" ? "game over" : "game.py"}</span>
+        <span>game.py</span>
       </div>
       <div className="snake-board-wrap">
         <div className="snake-board" role="application" aria-label="Jogo da cobrinha">
@@ -71,7 +71,9 @@ export default function SnakeGame() {
         {game.status === "game-over" && (
           <div className="snake-game-over" role="alert">
             <span>game over</span>
-            <button onClick={() => setGame(() => createGame())}>reiniciar</button>
+            <button className="snake-reset" onClick={() => setGame(() => createGame())}>
+              reiniciar
+            </button>
           </div>
         )}
       </div>
@@ -85,11 +87,6 @@ export default function SnakeGame() {
             {control.symbol}
           </button>
         ))}
-        {game.status !== "game-over" && (
-          <button className="snake-reset" onClick={() => setGame(() => createGame())}>
-            reiniciar
-          </button>
-        )}
       </div>
       <p>setas ou WASD para jogar</p>
     </div>

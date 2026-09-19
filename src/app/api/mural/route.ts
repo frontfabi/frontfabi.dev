@@ -1,15 +1,18 @@
 import { auth } from "@/lib/auth";
-import { createMessage, listMessages } from "@/lib/mural";
+import { createMessage, listMessagesForViewer } from "@/lib/mural";
+import { isSameOriginMutation } from "@/lib/mural-request-security";
 
 export async function GET() {
   try {
-    return Response.json(await listMessages());
+    const session = await auth();
+    return Response.json(await listMessagesForViewer(session?.user?.githubId));
   } catch (error) {
     return Response.json({ error: error instanceof Error ? error.message : "Erro ao carregar o mural" }, { status: 503 });
   }
 }
 
 export async function POST(request: Request) {
+  if (!isSameOriginMutation(request)) return Response.json({ error: "Origem inválida" }, { status: 403 });
   const session = await auth();
   if (!session?.user?.githubId || !session.user.login) return Response.json({ error: "Faça login com GitHub para publicar" }, { status: 401 });
   try {

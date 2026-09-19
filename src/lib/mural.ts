@@ -4,8 +4,10 @@ import {
   type PublicMuralMessage,
   type StoredMuralMessage,
 } from "./mural-message";
+import { deleteMessageForActor } from "./mural-delete";
 
 export type MuralMessage = PublicMuralMessage;
+export type MuralMessageForViewer = MuralMessage & { canDelete: boolean };
 
 const databaseUrl = process.env.DATABASE_URL;
 const sql = databaseUrl ? neon(databaseUrl) : null;
@@ -52,6 +54,26 @@ export async function listMessages(): Promise<MuralMessage[]> {
   );
 }
 
+export async function listMessagesForViewer(
+  githubId?: string,
+): Promise<MuralMessageForViewer[]> {
+  const messages = await listMessages();
+  if (!githubId) return messages.map((message) => ({ ...message, canDelete: false }));
+
+  const db = await database();
+  const rows = await db`
+    SELECT id FROM mural_messages
+    WHERE github_id = ${githubId}
+    ORDER BY created_at DESC
+    LIMIT 100
+  `;
+  const ownMessageIds = new Set(rows.map((row) => String(row.id)));
+  return messages.map((message) => ({
+    ...message,
+    canDelete: ownMessageIds.has(message.id),
+  }));
+}
+
 export async function createMessage(
   input: Omit<StoredMuralMessage, "id" | "createdAt">,
 ) {
@@ -69,4 +91,8 @@ export async function createMessage(
     avatarUrl: row.avatar_url,
     createdAt: new Date(row.created_at).toISOString(),
   });
+}
+
+export async function deleteMessage({ id, githubId }: { id: string; githubId: string }) {
+  return deleteMessageForActor(await database(), { id, githubId });
 }

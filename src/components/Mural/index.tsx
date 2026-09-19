@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
-import type { MuralMessage } from "@/lib/mural";
+import type { MuralMessageForViewer } from "@/lib/mural";
 import { muralPath } from "@/lib/seo";
 
 const ownerAvatar =
@@ -10,7 +10,7 @@ const ownerAvatar =
 
 export default function Mural({ onLogin }: { onLogin: () => void }) {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<MuralMessage[]>([]);
+  const [messages, setMessages] = useState<MuralMessageForViewer[]>([]);
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
   const [feedback, setFeedback] = useState<{
@@ -67,6 +67,25 @@ export default function Mural({ onLogin }: { onLogin: () => void }) {
       setSending(false);
     }
   };
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const remove = async (id: string) => {
+    if (deletingId || !window.confirm("Excluir este comentário?")) return;
+    setDeletingId(id);
+    setError("");
+    try {
+      const response = await fetch(`/api/mural/${id}`, { method: "DELETE" });
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.error || "Não foi possível excluir o comentário.");
+        return;
+      }
+      setMessages((current) => current.filter((message) => message.id !== id));
+    } catch {
+      setError("Não foi possível excluir o comentário.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div className="mural-widget">
@@ -93,6 +112,20 @@ export default function Mural({ onLogin }: { onLogin: () => void }) {
                 <br />
                 {item.body}
               </p>
+              {item.canDelete && (
+                <button
+                  className="mural-delete"
+                  type="button"
+                  aria-label="Excluir seu comentário"
+                  title="Excluir comentário"
+                  disabled={deletingId === item.id}
+                  onClick={() => remove(item.id)}
+                >
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M3 4h10M6 4V2h4v2m-5 0 .6 10h4.8L11 4M7 7v4m2-4v4" />
+                  </svg>
+                </button>
+              )}
             </article>
           ))
         ) : (
