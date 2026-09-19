@@ -1,7 +1,8 @@
+// Deletion only needs the number of returned rows, not their column types.
 type SqlQuery = (
   strings: TemplateStringsArray,
   ...values: unknown[]
-) => PromiseLike<{ id: string }[]>;
+) => PromiseLike<readonly unknown[]>;
 
 export async function deleteMessageForActor(
   database: SqlQuery,
